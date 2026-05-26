@@ -1,0 +1,2411 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { 
+  Linkedin, 
+  Mail, 
+  MapPin,
+  ArrowUpRight,
+  ChevronRight,
+  ShieldAlert,
+  Dna,
+  TrendingUp,
+  FlaskConical,
+  CheckCircle2,
+  PhoneCall,
+  GraduationCap,
+  Award,
+  Search,
+  Database,
+  Activity,
+  Filter,
+  BookOpen,
+  Clock,
+  Calendar,
+  X,
+  Menu,
+  ArrowRight
+} from "lucide-react";
+import { BLOG_POSTS, BlogPost } from "./data/blog";
+import olamideDavidProfile from "./assets/images/olamide_david_profile_custom.png";
+import expertiseBg from "./assets/images/olamide_david_profile_custom.png";
+import { supabase, isSupabaseConfigured } from "./supabaseClient";
+import { User, Lock, LogOut, Key, Check } from "lucide-react";
+
+const EXPERTISE = [
+  { id: "01", title: "Clinical Microbiology", desc: "Culturing, isolation, and biochemical identification of bacterial, fungal, and parasitic specimens." },
+  { id: "02", title: "Molecular Diagnostics", desc: "DNA & RNA amplification and detection using Polymerase Chain Reaction (PCR)." },
+  { id: "03", title: "Microscopic Analysis", desc: "Proficient with brightfield, phase contrast, and fluorescence microscopy to identify cellular morphology." },
+  { id: "04", title: "Performance Marketing", desc: "Customer insight integration, objection mapping, and performance optimization." },
+  { id: "05", title: "CRM Data Structuring", desc: "Lead qualification, contact segmentation, and systematic pipeline follow-up configurations." },
+  { id: "06", title: "Biochemical Assays", desc: "Hands-on expertise in ELISA, Gram staining, enzymatic assays, titrations, and dilutions." },
+  { id: "07", title: "Epidemiological Studies", desc: "Assisting in translating clinical trials data to analyze drug impacts on biological pathways." },
+  { id: "08", title: "Lab Safety & Compliance", desc: "Ensuring deep alignment with quality control standards, clean workflows, and safety protocols." },
+];
+
+const EXPERIENCE = [
+  {
+    id: "01",
+    role: "Freelance | Self-Employed",
+    company: "Performance Marketing",
+    period: "Aug 2025 - Present \u00b7 10 mos",
+    location: "Chester, England, United Kingdom \u00b7 Remote",
+    description: "Fed customer objections back into marketing campaigns to improve messaging alignment. Structured CRM data systematically to enable better lead qualification, segmentation and automated follow-up pathways, driving measurable growth.",
+    category: "marketing",
+    tags: ["CRM Data", "Lead Qualification", "Segmentation", "Marketing Strategy"]
+  },
+  {
+    id: "02",
+    role: "Laboratory Assistant",
+    company: "University of Chester",
+    period: "Jan 2024 - Present \u00b7 2 yrs 5 mos",
+    location: "Chester, England, United Kingdom \u00b7 Internship",
+    description: "Focused on the extrapolation and study of molecular structures within proteins (DNA, RNA). Conducted rigorous investigations into how pharmacophores and therapeutic drugs interact with biological systems, pathways, and potential side effects. Contributed to epidemiological studies on active clinical trials and translational research.",
+    category: "clinical",
+    tags: ["Molecular Biology", "DNA/RNA Structures", "ELISA", "PCR", "Epidemiology"]
+  },
+  {
+    id: "03",
+    role: "Medical Laboratory Assistant",
+    company: "Maryam Memorial Clinic and Maternity",
+    period: "Sep 2021 - Aug 2023 \u00b7 2 yrs",
+    location: "Nigeria \u00b7 On-site",
+    description: "Conducted exhaustive microscopic analyses of clinical samples, utilizing sophisticated brightfield, phase contrast, and fluorescence microscopy methodologies. Performed manual and real-time Polymerase Chain Reaction (PCR) molecular protocols for infectious diseases diagnosis. Collaborated daily with multidisciplinary pathologists and researchers while improving overall sample turnaround times by 20%.",
+    category: "clinical",
+    tags: ["PCR Diagnosis", "Microscopy Technique", "Sample Processing", "Turnaround Optimization"]
+  },
+  {
+    id: "04",
+    role: "Clinical Microbiologist",
+    company: "Federal Medical Centre",
+    period: "Jun 2020 - Sep 2021 \u00b7 1 yr 4 mos",
+    location: "Nigeria \u00b7 On-site",
+    description: "Identified pathogens securely using critical culture methods on bacterial, fungal, and parasitic specimens with selective media and customized biochemical assays. Applied professional Gram staining techniques to classify complex bacterial isolates. Successfully coordinated clinical findings with medical and nursing staff to streamline diagnostic paths and clinical care plan efficiency.",
+    category: "clinical",
+    tags: ["Selective Media", "Bioassays", "Pathogen Isolation", "Gram Staining"]
+  },
+  {
+    id: "05",
+    role: "Laboratory Assistant",
+    company: "Marleyshree Pharmaceutical Limited",
+    period: "Mar 2019 - May 2020 \u00b7 1 yr 3 mos",
+    location: "Nigeria \u00b7 On-site",
+    description: "Assisted in analytical assays for finished pharmaceutical products, validating concentrations and pharmacokinetics. Performed classic laboratory assays including titrations, exact pH measurements, and controlled clinical sample serial dilutions, upholding highest standards of team documentation.",
+    category: "clinical",
+    tags: ["Pharmacokinetics", "Titration Assay", "Serial Dilution", "Equipment Calibration"]
+  }
+];
+
+const EDUCATION = [
+  {
+    id: "01",
+    degree: "Master of Science - MS, Biomedical Sciences, General",
+    institution: "University of Chester",
+    period: "Oct 2023 – Sep 2024",
+    grade: "Distinction",
+    activities: "Student Liaison",
+    description: [
+      "Interaction of drugs with biological systems, their mechanisms of action, and potential side effects.",
+      "Investigation of genetic factors that contribute to health, disease, and the inheritance of traits.",
+      "Exploring immune responses, immune system disorders, and the development of vaccines.",
+      "Application of biotechnology techniques such as genetic engineering and various imaging technologies that play a crucial role in research and clinical applications."
+    ],
+    skills: ["Collaborative Problem Solving", "Cross-functional Team Leadership", "Drug Biology", "Translational Research"]
+  },
+  {
+    id: "02",
+    degree: "Bachelor of Science - BS, Microbiology, General",
+    institution: "Joseph Ayo Babalola University",
+    period: "Jan 2013 – Apr 2017",
+    grade: "",
+    activities: "",
+    description: [
+      "Foundational coursework across specialized sectors including medical bacteriology, virology, immunology, and mycology.",
+      "Hands-on microbiology wet-lab protocols, agar preparation, safety regulations, and aseptic diagnostic cultivation."
+    ],
+    skills: ["General Lab", "Aseptic Culturing", "Gram Staining", "Pathogen Assays"]
+  }
+];
+
+const DETAILED_SKILLS = [
+  {
+    name: "Troubleshooting",
+    category: "General Lab & QC",
+    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
+    desc: "Systematically identifying and repairing technical failures in molecular assays, diagnostic devices, and laboratory workflows; resolving data segmentation issues in CRM campaigns."
+  },
+  {
+    name: "General Lab",
+    category: "General Lab & QC",
+    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
+    desc: "Classic analytical assays, pH systems management, solution preparation, equipment calibration, serial dilutions, block sterilizations, and rigorous safety compliance across top institutions."
+  },
+  {
+    name: "Teamwork",
+    category: "Management & Growth",
+    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
+    desc: "Collaborating with multi-disciplinary pathologists, doctors, clinical operators, and growth marketers to expedite workflows and ensure alignment on complex deliverables."
+  },
+  {
+    name: "Molecular Biology",
+    category: "Analytical & Academic",
+    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
+    desc: "Studying protein dynamics, nucleic acid extraction (DNA, RNA), genetic engineering concepts, and analyzing structural molecules within biological pathways."
+  },
+  {
+    name: "Laboratory Skills",
+    category: "General Lab & QC",
+    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
+    desc: "Mastery of wet-lab techniques, COSHH safety, aseptic practice, clinical sample tracking, precise micro-pipetting, and quality-controlled documentation."
+  },
+  {
+    name: "culture methods",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Clinical Microbiologist",
+    contexts: ["Federal Medical Centre"],
+    desc: "Inoculation and incubation of bacterial, fungal, and parasitic specimens using selective and differential media to isolate pathogens."
+  },
+  {
+    name: "gram staining and interpretation",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Clinical Microbiologist",
+    contexts: ["Federal Medical Centre"],
+    desc: "Preparing heat-fixed bacterial smears, applying crystal violet/safranin protocol, and using oil-immersion brightfield microscopy to analyze cell walls."
+  },
+  {
+    name: "pathogen Isolation",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Clinical Microbiologist",
+    contexts: ["Federal Medical Centre"],
+    desc: "Isolating complex infective strains from patient specimens, executing pure colony transfers, and carrying out primary identification assays."
+  },
+  {
+    name: "Microbial Identification",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Clinical Microbiologist",
+    contexts: ["Federal Medical Centre"],
+    desc: "Running selective catalase, coagulase, and oxidase bio-chemical matrices to pinpoint bacteria, yeast, and mold down to genus/species level."
+  },
+  {
+    name: "Selective media and biochamical assay",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Clinical Microbiologist",
+    contexts: ["Federal Medical Centre"],
+    desc: "Formulating specialty agar lines (MacConkey, Blood, Chocolate) and performing automated/manual identification panel assays index cards."
+  },
+  {
+    name: "Molecular Diagnostics",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Medical laboratory Assistant",
+    contexts: ["Maryam Memorial Clinic and Maternity"],
+    desc: "Preparing cDNA libraries, conducting PCR thermal profiles, and validating fluorescence markers to make direct clinical determinations."
+  },
+  {
+    name: "Sample Analysis and interpretation",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Medical laboratory Assistant",
+    contexts: ["Maryam Memorial Clinic and Maternity"],
+    desc: "Screening blood, urine, or tissue samples, detecting morphology shifts, and completing rigorous quality control checkmarks before pathogen sign-off."
+  },
+  {
+    name: "Clinical Microbiology",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Medical laboratory Assistant",
+    contexts: ["Maryam Memorial Clinic and Maternity"],
+    desc: "Applying sterile techniques and biosafety rules to handle highly hazardous infections and coordinate findings with state/clinic databases."
+  },
+  {
+    name: "Customer Relationship Management (CRM)",
+    category: "Management & Growth",
+    contexts: ["Performance Marketing"],
+    desc: "Structuring segmentation, configuring follow-up pathways, tracking lead values, and aligning client objection data with ongoing campaign structures."
+  },
+  {
+    name: "Time Management",
+    category: "Management & Growth",
+    contexts: ["Performance Marketing", "Maryam Memorial Clinic and Maternity"],
+    desc: "Coordinating rapid-turnaround tests to lower patient wait times by 20% while handling remote execution schedules for freelance marketing operations."
+  },
+  {
+    name: "ELISA",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Laboratory Assistant",
+    contexts: ["University of Chester"],
+    desc: "Performing Enzyme-Linked Immunosorbent Assays to detect and quantify antibodies, hormones, and peptides in biological specimens with plate readers."
+  },
+  {
+    name: "Polymerase Chain Reaction (PCR)",
+    category: "Clinical & Molecular Diagnostics",
+    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity"],
+    desc: "Hands-on thermal cycling, target gene amplification, qualitative and quantitative PCR analysis, and troubleshooting primer dimer errors."
+  },
+  {
+    name: "Research Skills",
+    category: "Analytical & Academic",
+    role: "Laboratory Assistant",
+    contexts: ["University of Chester"],
+    desc: "Compiling translating trial logs, conducting epidemiological data collection, and formulating literature reviews on biomedical action paths."
+  },
+  {
+    name: "Reporting & Analysis",
+    category: "Analytical & Academic",
+    role: "Laboratory Assistant",
+    contexts: ["University of Chester"],
+    desc: "Authoring clinical reports, logging structural DNA findings, interpreting absorption spectra, and producing metrics models for active academic researchers."
+  },
+  {
+    name: "Bioassay",
+    category: "Clinical & Molecular Diagnostics",
+    role: "Laboratory Assistant",
+    contexts: ["University of Chester"],
+    desc: "Executing in vitro models to measure the comparative potency and toxicity profiles of drug candidates on designated pathway cells."
+  },
+  {
+    name: "Analytical Skills",
+    category: "Analytical & Academic",
+    contexts: ["University of Chester"],
+    desc: "Dissecting molecular drug dynamics, performing quantitative curves, mapping statistical error spreads, and resolving structural protein discrepancies."
+  },
+  {
+    name: "Collaborative Problem Solving",
+    category: "Management & Growth",
+    contexts: ["University of Chester"],
+    desc: "Uniting with academic PIs and clinical laboratory technicians to tackle experimental bottlenecks, troubleshoot ELISA anomalies, and align research."
+  },
+  {
+    name: "Cross-functional Team Leadership",
+    category: "Management & Growth",
+    contexts: ["University of Chester"],
+    desc: "Serving as a Postgraduate Student Liaison to direct communication channels between university departments, cohorts, and clinical staff."
+  }
+];
+
+export interface GeoTarget {
+  name: string;
+  sector: string;
+  lat: number;
+  lng: number;
+  score: number;
+  leadStatus: "Prospect Identified" | "Outreach Program Active" | "Friction Point Mapped" | "Qualified - Meeting Set" | "CRM Pipeline Connected";
+  objectionFriction: string;
+  clinicalAudit: string;
+  leadAcquisitionScoring: number;
+  contactPerson: string;
+  estimatedRevPot: string;
+  email?: string;
+  BusinessName?: string;
+  website?: string;
+  Description?: string;
+  "About Business"?: string;
+}
+
+function getHashCode(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+export function generateGeoTargets(query: string): GeoTarget[] {
+  const normQuery = query.toLowerCase().trim() || "coffee shops in london";
+  
+  if (normQuery.includes("coffee") && normQuery.includes("london")) {
+    return [
+      {
+        name: "The Artisan Brew Spot",
+        sector: "Premium Retail Beverage & CRM Flow",
+        lat: 51.5134,
+        lng: -0.1368,
+        score: 94,
+        leadStatus: "Prospect Identified",
+        objectionFriction: "High dynamic foot traffic, but zero automated retargeting sequences; drops ~40% of potential repeat customers.",
+        clinicalAudit: "Grade A SOP kitchen sterilization audit certified.",
+        leadAcquisitionScoring: 94,
+        contactPerson: "Marcus Vance (General Manager)",
+        estimatedRevPot: "£14,500/mo"
+      },
+      {
+        name: "Kensington Roasters Co.",
+        sector: "Client Retention Pipeline Audit",
+        lat: 51.5014,
+        lng: -0.1921,
+        score: 88,
+        leadStatus: "Outreach Program Active",
+        objectionFriction: "Standard email list exists but lacks segment tags. Outreach currently blocked by authority-level pricing objections.",
+        clinicalAudit: "Water filtration systems SOP compliant and calibrated.",
+        leadAcquisitionScoring: 88,
+        contactPerson: "Elena Rostova (Operations Director)",
+        estimatedRevPot: "£18,200/mo"
+      },
+      {
+        name: "Pancras Station Espresso",
+        sector: "Commuter Density Lead Capture",
+        lat: 51.5303,
+        lng: -0.1253,
+        score: 76,
+        leadStatus: "Friction Point Mapped",
+        objectionFriction: "Massive footfall count but low customer lifetime value. CRM loyalty onboarding sequence has a 75% cart drop-off rate.",
+        clinicalAudit: "Auto-calibrated high-temp pressure apparatus SOP checked.",
+        leadAcquisitionScoring: 76,
+        contactPerson: "David Miller (Senior Partner)",
+        estimatedRevPot: "£32,000/mo"
+      },
+      {
+        name: "Shoreditch Grind Works",
+        sector: "Freelance Cohort Growth Funnel",
+        lat: 51.5262,
+        lng: -0.0784,
+        score: 91,
+        leadStatus: "Qualified - Meeting Set",
+        objectionFriction: "Strong organic review profile, but vulnerable to pricing pressure from co-working spots. Needs custom CRM lifecycle automation.",
+        clinicalAudit: "SOP microbiological sanitation swab logs fully verified.",
+        leadAcquisitionScoring: 91,
+        contactPerson: "Femi Adebayo (Founder & CEO)",
+        estimatedRevPot: "£21,000/mo"
+      }
+    ];
+  }
+
+  let keyword = "Business Target";
+  let location = "London";
+  
+  if (normQuery.includes(" in ")) {
+    const parts = normQuery.split(" in ");
+    keyword = parts[0].trim();
+    location = parts[1].trim();
+  } else {
+    const words = normQuery.split(" ");
+    if (words.length > 1) {
+      keyword = words[0];
+      location = words.slice(1).join(" ");
+    } else {
+      keyword = normQuery;
+    }
+  }
+
+  const capKW = keyword.replace(/\b\w/g, c => c.toUpperCase());
+  const capLoc = location.replace(/\b\w/g, c => c.toUpperCase());
+  
+  const hash = getHashCode(normQuery);
+  
+  let baseLat = 51.5074;
+  let baseLng = -0.1278;
+  
+  if (capLoc.toLowerCase().includes("york")) {
+    baseLat = 40.7128;
+    baseLng = -74.0060;
+  } else if (capLoc.toLowerCase().includes("manchester")) {
+    baseLat = 53.4808;
+    baseLng = -2.2426;
+  } else if (capLoc.toLowerCase().includes("leeds")) {
+    baseLat = 53.8008;
+    baseLng = -1.5491;
+  } else if (capLoc.toLowerCase().includes("paris")) {
+    baseLat = 48.8566;
+    baseLng = 2.3522;
+  } else if (capLoc.toLowerCase().includes("birmingham")) {
+    baseLat = 52.4862;
+    baseLng = -1.8904;
+  } else {
+    // Generate simple coordinates from hash
+    baseLat = 50 + (hash % 100) / 10;
+    baseLng = -2 + ((hash * 7) % 40) / 10;
+  }
+
+  const sectors = [
+    "Localized Compliance Audit", 
+    "High-Density Lead Optimization", 
+    "CRM Staged System Alignment", 
+    "Commercial Objections Analysis",
+    "Automation & Diagnostics Calibration"
+  ];
+
+  const statuses: GeoTarget["leadStatus"][] = [
+    "Prospect Identified", 
+    "Outreach Program Active", 
+    "Friction Point Mapped", 
+    "Qualified - Meeting Set", 
+    "CRM Pipeline Connected"
+  ];
+
+  const objectionFrictions = [
+    "Unstable acquisition model. Funnel lacks a segmented email lifecycle, leading to major client leakage.",
+    "Target expresses skepticism around custom platform pricing. CRM outreach sequence needs optimized case studies.",
+    "Solid operational standards, but lacks optimized follow-up systems. Post-inquiry pipeline drops 55% of leads.",
+    "SOP systems are run on analog logs, producing high checklist error rates. Customer pipeline requires automated alerts."
+  ];
+
+  const clinicalAudits = [
+    "Grade A SOP sterilization protocols verified.",
+    "Meets localized healthcare environment compliance benchmarks.",
+    "Diagnostic calibration logs certified correct.",
+    "Double-blind quality assurance certified compliant."
+  ];
+
+  const names = [
+    `${capLoc} Allied ${capKW}`,
+    `${capKW} Collective (${capLoc})`,
+    `Standard ${capKW} Diagnostics`,
+    `Apex ${capKW} Partners (${capLoc})`
+  ];
+
+  const contacts = [
+    "Dr. Arthur Pendelton (Clinical Lead)",
+    "Sarah Jenkins (Operations Manager)",
+    "Peter Sterling (Communications Officer)",
+    "James Cole (Procurement Director)"
+  ];
+
+  return [0, 1, 2, 3].map(i => {
+    const targetHash = hash + i * 313;
+    const offsetLat = ((targetHash % 100) - 50) / 5000;
+    const offsetLng = (((targetHash * 13) % 100) - 50) / 5000;
+    const score = 70 + (targetHash % 28);
+    const rev = 12000 + (targetHash % 38000);
+    
+    return {
+      name: names[i % names.length],
+      sector: sectors[(targetHash + i) % sectors.length],
+      lat: Number((baseLat + offsetLat).toFixed(4)),
+      lng: Number((baseLng + offsetLng).toFixed(4)),
+      score: score,
+      leadStatus: statuses[(targetHash + i) % statuses.length],
+      objectionFriction: objectionFrictions[(targetHash + i) % objectionFrictions.length],
+      clinicalAudit: clinicalAudits[(targetHash + i) % clinicalAudits.length],
+      leadAcquisitionScoring: score,
+      contactPerson: contacts[i % contacts.length],
+      estimatedRevPot: `£${rev.toLocaleString()}/mo`
+    };
+  });
+}
+
+function extractRawItems(raw: any): any[] {
+  if (!raw) return [];
+
+  // 1. If it's an array, process each item recursively and flatten
+  if (Array.isArray(raw)) {
+    const items: any[] = [];
+    raw.forEach(item => {
+      if (item && typeof item === "object" && ("json" in item || "data" in item)) {
+        const nested = item.json ?? item.data;
+        items.push(...extractRawItems(nested));
+      } else {
+        items.push(...extractRawItems(item));
+      }
+    });
+    return items;
+  }
+
+  // 2. If it is an object
+  if (typeof raw === "object") {
+    // If it has a json or data property specifically (n8n single-item wrapper)
+    if ("json" in raw || "data" in raw) {
+      return extractRawItems(raw.json ?? raw.data);
+    }
+
+    // Check if it has a known array property that holds the records
+    const arrayKeys = [
+      "targets", "results", "leads", "data", "items", 
+      "output", "businesses", "entities", "companies", 
+      "records", "rows", "locations", "response"
+    ];
+    for (const key of arrayKeys) {
+      if (key in raw && Array.isArray(raw[key])) {
+        return extractRawItems(raw[key]);
+      }
+    }
+
+    // If it looks like a direct single result (has some business/contact fields)
+    const directKeys = ["BusinessName", "businessName", "name", "email", "contactEmail", "website", "url", "Description", "description", "About Business", "aboutBusiness"];
+    const hasDirectFields = directKeys.some(k => k in raw);
+    if (hasDirectFields) {
+      return [raw];
+    }
+
+    // Check if any other property is an array and use that
+    for (const key of Object.keys(raw)) {
+      if (Array.isArray(raw[key])) {
+        return extractRawItems(raw[key]);
+      }
+    }
+
+    // Fallback: return the object as a single-element array
+    return [raw];
+  }
+
+  // Fallback for primitives or strings
+  return [];
+}
+
+export default function App() {
+  const [activePage, setActivePage] = useState<"about" | "specialisation" | "experience" | "tools" | "blog" | "contact">("about");
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" as any });
+  }, [activePage]);
+
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null);
+  const [blogCategory, setBlogCategory] = useState("All");
+  const [blogSearch, setBlogSearch] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [geoSearchPhrase, setGeoSearchPhrase] = useState("coffee shops in London");
+  const [geoActiveQuery, setGeoActiveQuery] = useState("coffee shops in London");
+  const [isSearchingGeo, setIsSearchingGeo] = useState(false);
+  const [searchGeoStep, setSearchGeoStep] = useState(0);
+  const [selectedTargetIndex, setSelectedTargetIndex] = useState(0);
+  const [activeGeoTargets, setActiveGeoTargets] = useState<GeoTarget[]>(() => generateGeoTargets("coffee shops in London"));
+  const [webhookStatus, setWebhookStatus] = useState<string>("");
+  const [webhookRawResponse, setWebhookRawResponse] = useState<any>(null);
+
+  // --- Supabase Authentication States & Initialization ---
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authConfirmPassword, setAuthConfirmPassword] = useState("");
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [authSuccessMsg, setAuthSuccessMsg] = useState<string | null>(null);
+  const [authLoading, setAuthLoading] = useState(false);
+  const [user, setUser] = useState<{ email: string; id?: string; isSimulated?: boolean } | null>(null);
+
+  const isConfigured = isSupabaseConfigured();
+
+  useEffect(() => {
+    if (isConfigured) {
+      // Fetch initial user session
+      supabase.auth.getUser().then(({ data: { user: supabaseUser } }) => {
+        if (supabaseUser) {
+          setUser({ email: supabaseUser.email || "", id: supabaseUser.id });
+        }
+      });
+
+      // Set up authentication listener
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (session?.user) {
+          setUser({ email: session.user.email || "", id: session.user.id });
+        } else {
+          setUser(null);
+        }
+      });
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    } else {
+      // Check if there is a simulated user stored in localStorage
+      const storedUser = localStorage.getItem("simulated_supabase_user");
+      if (storedUser) {
+        setUser({ email: storedUser, isSimulated: true });
+      }
+    }
+  }, [isConfigured]);
+
+  const handleAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError(null);
+    setAuthSuccessMsg(null);
+    setAuthLoading(true);
+
+    if (!authEmail.trim() || !authPassword.trim()) {
+      setAuthError("Email and Password are required.");
+      setAuthLoading(false);
+      return;
+    }
+
+    if (authMode === "signup" && authPassword !== authConfirmPassword) {
+      setAuthError("Passwords do not match.");
+      setAuthLoading(false);
+      return;
+    }
+
+    try {
+      if (isConfigured) {
+        if (authMode === "signup") {
+          const { data, error } = await supabase.auth.signUp({
+            email: authEmail,
+            password: authPassword,
+          });
+          if (error) throw error;
+          
+          if (data.session) {
+            setUser({ email: data.session.user.email || "", id: data.session.user.id });
+            setAuthSuccessMsg("Account successfully created and logged in!");
+          } else {
+            setAuthSuccessMsg("Registration successful! Please check your email inbox to verify your account.");
+          }
+        } else {
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: authEmail,
+            password: authPassword,
+          });
+          if (error) throw error;
+          if (data.user) {
+            setUser({ email: data.user.email || "", id: data.user.id });
+            setAuthSuccessMsg("Successfully signed in!");
+            setTimeout(() => {
+              setIsAuthModalOpen(false);
+              setAuthSuccessMsg(null);
+              setAuthEmail("");
+              setAuthPassword("");
+            }, 800);
+          }
+        }
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 800));
+        localStorage.setItem("simulated_supabase_user", authEmail);
+        setUser({ email: authEmail, isSimulated: true });
+        setAuthSuccessMsg(authMode === "signup" ? "Success (Simulated): Account created!" : "Success (Simulated): Signed in successfully!");
+        setTimeout(() => {
+          setIsAuthModalOpen(false);
+          setAuthSuccessMsg(null);
+          setAuthEmail("");
+          setAuthPassword("");
+          setAuthConfirmPassword("");
+        }, 1200);
+      }
+    } catch (err: any) {
+      setAuthError(err.message || "An authentication error occurred.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    setAuthLoading(true);
+    setAuthError(null);
+    try {
+      if (isConfigured) {
+        await supabase.auth.signOut();
+      } else {
+        localStorage.removeItem("simulated_supabase_user");
+      }
+      setUser(null);
+      setAuthSuccessMsg("Successfully logged out.");
+      setTimeout(() => {
+        setAuthSuccessMsg(null);
+        setIsAuthModalOpen(false);
+      }, 800);
+    } catch (err: any) {
+      setAuthError(err.message || "Sign out failed.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleExecuteGeoSearch = async (phrase: string) => {
+    if (!user) {
+      setAuthMode("signup");
+      setIsAuthModalOpen(true);
+      return;
+    }
+    if (!phrase.trim()) return;
+    setGeoSearchPhrase(phrase);
+    setIsSearchingGeo(true);
+    setSearchGeoStep(1);
+    setWebhookStatus("Initiating SerpAPI proxy session...");
+    setWebhookRawResponse(null);
+    
+    try {
+      // Step 2: Establish connection and send payload
+      await new Promise(resolve => setTimeout(resolve, 600));
+      setSearchGeoStep(2);
+      setWebhookStatus("Connecting to Google Maps index via SerpAPI...");
+      
+      const response = await fetch("/api/proxy-webhook", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          phrase: phrase
+        })
+      });
+      
+      setSearchGeoStep(3);
+      setWebhookStatus("Retrieving real geographic matches...");
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Proxy responded with status ${response.status}`);
+      }
+      
+      const result = await response.json();
+      const data = result.data;
+      setWebhookRawResponse(result);
+      
+      await new Promise(resolve => setTimeout(resolve, 600));
+      setIsSearchingGeo(false);
+      setSearchGeoStep(0);
+      setGeoActiveQuery(phrase);
+      setSelectedTargetIndex(0);
+      
+      // Parse data and update geo targets using recursive array extractor
+      const rawItems = extractRawItems(data);
+      
+      // Map raw items into beautiful GeoTargets
+      if (rawItems.length > 0) {
+        const parsedTargets: GeoTarget[] = rawItems.map((item: any, idx: number) => {
+          const name = String(item.BusinessName || item.businessName || item.name || item.title || `Opportunity [T-${idx + 1}]`);
+          const sector = String(item.sector || item.category || "Target Market Entity");
+          const lat = Number(item.lat || item.latitude || (51.5134 + (idx * 0.012) - 0.005));
+          const lng = Number(item.lng || item.longitude || (-0.1368 + (idx * 0.012) - 0.005));
+          const score = Number(item.score || item.leadAcquisitionScoring || 90 - (idx * 4) % 15);
+          
+          const rawEmail = item.email || item.contactEmail || "";
+          const email = String(rawEmail);
+          const website = String(item.website || item.url || item.link || "");
+          const description = String(item.Description || item.description || "[null]");
+          const aboutBusiness = String(item["About Business"] || item.aboutBusiness || item.about || "");
+          
+          // Format backup strings if they aren't provided by webhook
+          const descVal = description && description !== "[null]" ? description : "Pipeline registered. Webhook synchronized custom intelligence records.";
+          const contactPerson = email && email !== "[null]" ? email : "Marcus Vance (General Manager / Lead Contact)";
+          const clinicalAudit = aboutBusiness && aboutBusiness !== "[null]" ? `About Business: "${aboutBusiness}"` : "Compliant with localized SOP clinical benchmarks.";
+          const objectionFriction = descVal.startsWith("Description:") ? descVal : `Description: "${descVal}"`;
+
+          return {
+            name,
+            sector,
+            lat,
+            lng,
+            score: isNaN(score) ? 88 : score,
+            leadStatus: "Qualified - Meeting Set",
+            objectionFriction,
+            clinicalAudit,
+            leadAcquisitionScoring: isNaN(score) ? 88 : score,
+            contactPerson,
+            estimatedRevPot: item.estimatedRevPot || item.revenue || "£14,500/mo",
+            
+            // Webhook specific fields
+            email: email || undefined,
+            BusinessName: name,
+            website: website || undefined,
+            Description: description || undefined,
+            "About Business": aboutBusiness || undefined
+          };
+        });
+        
+        setActiveGeoTargets(parsedTargets);
+        setWebhookStatus(`Successfully parsed ${parsedTargets.length} local results from Google Maps.`);
+      } else if (typeof data === "string" && data.length > 0) {
+        const derived = generateGeoTargets(phrase);
+        if (derived.length > 0) {
+          derived[0].objectionFriction = `SerpAPI Raw Response: "${data}"`;
+          derived[0].contactPerson = "SerpAPI Response String";
+        }
+        setActiveGeoTargets(derived);
+        setWebhookStatus(`Response received from SerpAPI query: "${data.substring(0, 40)}${data.length > 40 ? '...' : ''}"`);
+      } else {
+        setActiveGeoTargets(generateGeoTargets(phrase));
+        setWebhookStatus("Processed query successfully (No custom results from SerpAPI).");
+      }
+      
+    } catch (err: any) {
+      console.error("SerpAPI processing error:", err);
+      setWebhookRawResponse({ success: false, error: err.message || String(err), simulatedFallback: true });
+      await new Promise(resolve => setTimeout(resolve, 600));
+      setIsSearchingGeo(false);
+      setSearchGeoStep(0);
+      setGeoActiveQuery(phrase);
+      setSelectedTargetIndex(0);
+      
+      const errTargets = generateGeoTargets(phrase);
+      if (errTargets.length > 0) {
+        if (err.message && err.message.includes("SERP_API_KEY")) {
+          errTargets[0].name = "⚠ SerpAPI Credentials Needed";
+          errTargets[0].objectionFriction = "Description: 'Please provide your Google SerpAPI Key inside the Settings Secrets panel in AI Studio.'";
+          errTargets[0].contactPerson = "Setup Action Required";
+        } else {
+          errTargets[0].name = "⚠ Connection Offline";
+          errTargets[0].objectionFriction = `Description: 'Failed to complete call: ${err.message || "Unknown error"}.'`;
+          errTargets[0].contactPerson = "Network State Block";
+        }
+      }
+      setActiveGeoTargets(errTargets);
+      setWebhookStatus(`SerpAPI query fallback activated. Reason: ${err.message || 'CORS/API Credentials'}`);
+    }
+  };
+
+  const filteredSkills = DETAILED_SKILLS.filter(skill => {
+    const matchesCategory = selectedCategory === "All" || skill.category === selectedCategory;
+    const matchesSearch = skill.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          skill.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          skill.contexts.some(c => c.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
+
+  const filteredBlogPosts = BLOG_POSTS.filter(post => {
+    const matchesCategory = blogCategory === "All" || post.category === blogCategory;
+    const matchesSearch = post.title.toLowerCase().includes(blogSearch.toLowerCase()) || 
+                          post.summary.toLowerCase().includes(blogSearch.toLowerCase()) ||
+                          post.tags.some(t => t.toLowerCase().includes(blogSearch.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
+
+  return (
+    <div className="relative w-full overflow-x-hidden bg-black text-zinc-300 font-sans selection:bg-orange-500/30 selection:text-orange-200">
+      
+      {/* Background glow meshes */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[150px] -z-10"></div>
+      <div className="absolute top-[40%] right-10 w-[600px] h-[600px] bg-orange-500/5 rounded-full blur-[180px] -z-10"></div>
+      <div className="absolute bottom-[10%] left-10 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[150px] -z-10"></div>
+
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-black/60 backdrop-blur-md px-4 lg:px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3 lg:gap-8">
+          <button 
+            onClick={() => { setActivePage("about"); setIsMobileMenuOpen(false); }} 
+            className="text-base lg:text-xl font-bold tracking-tight text-white flex items-center gap-2 cursor-pointer focus:outline-none bg-transparent border-none p-0 whitespace-nowrap"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Olamide David
+          </button>
+          <div className="hidden md:flex items-center gap-3 lg:gap-6 text-[10px] lg:text-xs font-semibold uppercase tracking-wider">
+            {[
+              { id: "about", label: "About" },
+              { id: "specialisation", label: "Specialisation" },
+              { id: "experience", label: "Experience" },
+              { id: "tools", label: "Tools" },
+              { id: "blog", label: "Publications" },
+              { id: "contact", label: "Contact" }
+            ].map((page) => (
+              <button
+                key={page.id}
+                onClick={() => setActivePage(page.id as any)}
+                className={`transition-colors relative py-1.5 cursor-pointer focus:outline-none whitespace-nowrap ${
+                  activePage === page.id 
+                    ? "text-emerald-400 font-bold" 
+                    : "text-zinc-500 hover:text-white"
+                }`}
+              >
+                {page.label}
+                {activePage === page.id && (
+                  <motion.span 
+                    layoutId="activeTabUnderline" 
+                    className="absolute bottom-0 left-0 w-full h-[2px] bg-emerald-500"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setActivePage("contact")} 
+            className="hidden md:inline-block px-3 py-1.5 lg:px-5 lg:py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] focus:outline-none cursor-pointer border-none whitespace-nowrap"
+          >
+            Let's Talk
+          </button>
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 -mr-2 text-zinc-400 hover:text-white md:hidden cursor-pointer focus:outline-none z-50 bg-transparent border-none"
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </nav>
+ 
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-zinc-950/98 backdrop-blur-xl md:hidden pt-28 px-8 pb-12 flex flex-col justify-between"
+          >
+            <div className="flex flex-col gap-4 text-base font-bold uppercase tracking-wider text-zinc-400">
+              {[
+                { id: "about", label: "About" },
+                { id: "specialisation", label: "Specialisation & Skills" },
+                { id: "experience", label: "Experience & Education" },
+                { id: "tools", label: "Tools & Terminal" },
+                { id: "blog", label: "Publications" },
+                { id: "contact", label: "Contact" }
+              ].map((item, idx) => (
+                <motion.button
+                  key={item.id}
+                  initial={{ opacity: 0, x: -15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.04 }}
+                  onClick={() => {
+                    setActivePage(item.id as any);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`text-left py-3 border-b border-white/5 flex items-center justify-between cursor-pointer focus:outline-none bg-transparent ${
+                    activePage === item.id ? "text-emerald-400" : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  <ChevronRight size={16} className={activePage === item.id ? "text-emerald-500" : "text-zinc-600"} />
+                </motion.button>
+              ))}
+            </div>
+ 
+            <div className="flex flex-col gap-3">
+              {user ? (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setIsAuthModalOpen(true);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-4 border border-emerald-500/30 bg-emerald-950/20 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer"
+                >
+                  <User size={14} className="animate-pulse" />
+                  <span className="max-w-[200px] truncate">{user.email} (Profile)</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setAuthMode("signin");
+                    setIsAuthModalOpen(true);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-4 border border-white/10 bg-zinc-900/40 text-zinc-300 hover:text-white rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer"
+                >
+                  <User size={14} />
+                  <span>Sign In / Sign Up</span>
+                </button>
+              )}
+
+              <button 
+                onClick={() => {
+                  setActivePage("contact");
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full text-center py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.25)] cursor-pointer border-none"
+              >
+                Let's Talk
+              </button>
+              <div className="flex justify-center gap-8 text-zinc-500 pt-4 border-t border-white/5">
+                <a href="https://linkedin.com/in/olamidedavid" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-2">
+                  <Linkedin size={20} /> <span className="text-xs">LinkedIn</span>
+                </a>
+                <a href="mailto:olamideruth387@gmail.com" className="hover:text-white transition-colors flex items-center gap-2">
+                  <Mail size={20} /> <span className="text-xs">Email</span>
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Side Quick Social / Navigation */}
+      <div className="fixed left-6 bottom-12 z-40 hidden lg:flex flex-col gap-6 text-zinc-500">
+        <a href="https://linkedin.com/in/olamidedavid" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-2 group">
+          <Linkedin size={18} />
+          <span className="text-[9px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Linkedin</span>
+        </a>
+        <a href="mailto:olamideruth387@gmail.com" className="hover:text-white transition-colors flex items-center gap-2 group">
+          <Mail size={18} />
+          <span className="text-[9px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Email</span>
+        </a>
+      </div>
+
+      <main className="max-w-7xl mx-auto px-6 pt-24 min-h-[calc(100vh-140px)]">
+        <AnimatePresence mode="wait">
+          {activePage === "about" && (
+            <motion.div
+              key="about-page"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Hero Section */}
+        <section id="about" className="min-h-screen flex flex-col items-center justify-center pt-24 pb-12 relative">
+          
+          <div className="grid lg:grid-cols-12 gap-12 items-center w-full max-w-6xl">
+            {/* Visual Column */}
+            <div className="lg:col-span-5 flex justify-center order-2 lg:order-1">
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="relative w-72 h-96 lg:w-80 lg:h-[420px]"
+              >
+                <div className="absolute inset-0 border border-emerald-500/20 rounded-2xl transform rotate-3 -z-10"></div>
+                <div className="absolute inset-0 border border-orange-500/10 rounded-2xl transform -rotate-2 -z-10"></div>
+                <img 
+                  src={olamideDavidProfile}
+                  alt="Olamide David"
+                  className="w-full h-full object-cover rounded-2xl grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl border border-white/10"
+                  referrerPolicy="no-referrer"
+                />
+              </motion.div>
+            </div>
+
+            {/* Text Heading Column */}
+            <div className="lg:col-span-7 order-1 lg:order-2 space-y-6">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="flex items-center gap-3 text-xs font-mono tracking-widest uppercase text-emerald-500"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Clinical Diagnostics & Digital Growth</span>
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 1 }}
+                className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9]"
+              >
+                Olamide<br />
+                <span className="text-emerald-400">David.</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 1 }}
+                className="text-xl md:text-2xl text-zinc-400 font-light leading-relaxed max-w-lg"
+              >
+                Bringing uncompromising precision of clinical laboratory science into data-driven performance marketing.
+              </motion.p>
+            </div>
+          </div>
+        </section>
+
+        {/* Intro Highlight Row */}
+        <section className="py-24 border-y border-white/5 bg-zinc-950/20 -mx-6 px-6">
+          <motion.div 
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             className="max-w-4xl"
+          >
+            <span className="text-xs font-mono text-zinc-650 tracking-wider mb-2 block uppercase">// PERSPECTIVE</span>
+            <p className="text-2xl md:text-4xl lg:text-5xl font-light text-zinc-100 leading-tight">
+              I operate at the intersection of <span className="text-emerald-400 font-medium font-sans">rigorous molecular diagnostics</span> and <span className="text-orange-400 font-medium font-mono">high-performing CRM marketing</span> — where analytical precision drives real-world outcomes.
+            </p>
+          </motion.div>
+        </section>
+      </motion.div>
+    )}
+
+        {activePage === "specialisation" && (
+          <motion.div
+            key="specialisation-page"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Expertise Grid */}
+        <section id="specialisation" className="py-32 relative">
+          <div className="grid lg:grid-cols-12 gap-16">
+            <div className="lg:col-span-5">
+              <span className="text-xs font-mono text-zinc-600 mb-6 block uppercase tracking-widest">// Capability Set</span>
+              <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-8">
+                Areas of<br />
+                <span className="text-emerald-500">Specialisation.</span>
+              </h2>
+              <p className="text-zinc-500 max-w-sm text-base leading-relaxed mb-12">
+                A dual proficiency combining high-level clinical medicine/microbiology procedures with sophisticated metrics-driven sales funnel optimization.
+              </p>
+
+              <div className="relative w-full aspect-video rounded-3xl overflow-hidden bg-zinc-900 group">
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
+                <img 
+                  src={expertiseBg} 
+                  alt="Analytical and Diagnostic Focus"
+                  className="w-full h-full object-cover opacity-40 grayscale group-hover:scale-105 transition-transform duration-1000"
+                />
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {EXPERTISE.map((item) => (
+                <div key={item.id} className="p-6 rounded-2xl bg-zinc-950/40 border border-white/5 hover:border-emerald-500/20 transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-xs font-mono text-emerald-500">{item.id}</span>
+                    <h4 className="text-white font-bold tracking-tight text-lg">{item.title}</h4>
+                  </div>
+                  <p className="text-zinc-500 text-xs leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+          </motion.div>
+        )}
+
+        {activePage === "experience" && (
+          <motion.div
+            key="experience-page"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Experience Timeline Section (Converted from Experiments) */}
+            <section id="experience" className="py-32 border-t border-white/5 relative bg-zinc-950/30 -mx-6 px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-20">
+               <span className="text-xs font-mono text-emerald-500 mb-6 block uppercase tracking-widest">// Career & Milestones</span>
+               <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9]">
+                 Professional Experience
+               </h2>
+               <p className="text-zinc-500 text-lg max-w-2xl mt-4">
+                 A robust record of medical diagnostic assistance and strategic campaign support characterized by meticulous attention to detail.
+               </p>
+            </div>
+
+            <div className="space-y-8">
+              {EXPERIENCE.map((job) => (
+                <div 
+                  key={job.id} 
+                  className="group p-8 rounded-3xl bg-zinc-900/10 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 hover:bg-zinc-900/20"
+                >
+                  <div className="grid lg:grid-cols-12 gap-8 items-start">
+                    {/* Prefix and Period */}
+                    <div className="lg:col-span-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-mono text-zinc-600 font-bold">{job.id}</span>
+                        <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-bold tracking-wider">
+                          {job.category === "clinical" ? "Clinical Research" : "Digital CRM"}
+                        </span>
+                      </div>
+                      <p className="text-sm font-semibold text-zinc-400">{job.period}</p>
+                      <span className="text-xs text-zinc-600 mt-1 block flex items-center gap-1.5">
+                        <MapPin size={12} className="text-emerald-500/60" /> {job.location.split(' \u00b7 ')[0]}
+                      </span>
+                    </div>
+
+                    {/* Role Description */}
+                    <div className="lg:col-span-9 space-y-4">
+                      <div>
+                        <h3 className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-3">
+                          {job.role}
+                          <span className="text-zinc-500 font-light text-xl">/</span>
+                          <span className="text-lg font-medium text-emerald-500/90">{job.company}</span>
+                        </h3>
+                      </div>
+                      <p className="text-zinc-400 text-sm leading-relaxed max-w-3xl">
+                        {job.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {job.tags.map(tag => (
+                          <span key={tag} className="px-3 py-1 bg-zinc-950 border border-white/5 rounded-full text-[10px] text-zinc-500 uppercase tracking-widest group-hover:text-white transition-colors duration-300">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Education Timeline Section */}
+        <section id="education" className="py-32 border-t border-white/5 relative bg-zinc-950/20 px-6 -mx-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-20">
+               <span className="text-xs font-mono text-emerald-500 mb-6 block uppercase tracking-widest">// Academic Background</span>
+               <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9] flex items-center gap-4">
+                 Education
+               </h2>
+               <p className="text-zinc-500 text-lg max-w-2xl mt-4">
+                 Rigorous academic training in molecular biology, drug pathways, immunology, and general clinical microbiology.
+               </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {EDUCATION.map((edu) => (
+                <div 
+                  key={edu.id} 
+                  className="group p-8 rounded-3xl bg-zinc-900/10 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 hover:bg-zinc-900/20 flex flex-col justify-between"
+                >
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs font-mono text-zinc-600 font-bold">{edu.id}</span>
+                          <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-bold tracking-wider">
+                            {edu.id === "01" ? "Postgraduate" : "Undergraduate"}
+                          </span>
+                        </div>
+                        <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">
+                          {edu.degree}
+                        </h3>
+                        <p className="text-emerald-500/90 font-medium text-sm mt-1">{edu.institution}</p>
+                      </div>
+                    </div>
+
+                    <div className="text-xs font-mono text-zinc-500 flex flex-wrap gap-4 border-t border-b border-white/5 py-3">
+                      <div>
+                        <span className="text-zinc-600 uppercase tracking-wider block text-[9.5px] mb-0.5">Timeline</span>
+                        <span className="text-zinc-400">{edu.period}</span>
+                      </div>
+                      {edu.grade && (
+                        <div>
+                          <span className="text-zinc-600 uppercase tracking-wider block text-[9.5px] mb-0.5">Grade</span>
+                          <span className="text-emerald-400 font-bold flex items-center gap-1">
+                            <Award size={12} /> {edu.grade}
+                          </span>
+                        </div>
+                      )}
+                      {edu.activities && (
+                        <div>
+                          <span className="text-zinc-600 uppercase tracking-wider block text-[9.5px] mb-0.5">Activities & Societies</span>
+                          <span className="text-zinc-400">{edu.activities}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {edu.description && edu.description.length > 0 && (
+                      <div className="space-y-3">
+                        <p className="text-xs font-mono text-zinc-500 uppercase tracking-wider flex items-center gap-1.5">
+                          <GraduationCap size={14} className="text-emerald-500" /> // Key Studies & Core Focus
+                        </p>
+                        <ul className="space-y-2 text-zinc-400 text-xs leading-relaxed pl-4 list-disc marker:text-emerald-500">
+                          {edu.description.map((desc, idx) => (
+                            <li key={idx}>{desc}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-white/5">
+                    {edu.skills.map((skill) => (
+                      <span key={skill} className="px-2.5 py-1 bg-zinc-950 border border-white/5 rounded-full text-[10px] text-zinc-500 uppercase tracking-widest group-hover:text-white transition-colors duration-300">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+          </motion.div>
+        )}
+
+        {activePage === "specialisation" && (
+          <motion.div
+            key="skills-matrix-page"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Skills Validation Section */}
+            <section id="skills" className="py-32 border-t border-white/5 relative bg-black/40 px-6 -mx-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-16">
+               <span className="text-xs font-mono text-emerald-500 mb-6 block uppercase tracking-widest">// Competency Validation</span>
+               <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9]">
+                 Skills & Practice Matrix
+               </h2>
+               <p className="text-zinc-500 text-lg max-w-2xl mt-4">
+                 A comprehensive layout of validated technical proficiencies mapped directly to proven performance across clinical labs and digital growth setups.
+               </p>
+            </div>
+
+            {/* Controls Bar */}
+            <div className="flex flex-col lg:flex-row gap-6 justify-between items-stretch lg:items-center pb-8 border-b border-white/5 mb-10">
+              {/* Category selector */}
+              <div className="flex flex-wrap gap-2">
+                {["All", "Clinical & Molecular Diagnostics", "General Lab & QC", "Analytical & Academic", "Management & Growth"].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 ${
+                      selectedCategory === cat
+                        ? "bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.25)] font-bold"
+                        : "bg-zinc-900/40 text-zinc-400 border border-white/5 hover:border-emerald-500/20 hover:text-white"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+
+              {/* Search field */}
+              <div className="relative w-full lg:max-w-xs">
+                <div className="absolute inset-y-0 left-3.5 flex items-center pointer-events-none text-zinc-500">
+                  <Search size={14} className="group-hover:text-emerald-500 text-zinc-500" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search skills, methods or places..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-full bg-zinc-900/30 border border-white/5 focus:border-emerald-500/50 text-xs text-white placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all duration-300"
+                />
+              </div>
+            </div>
+
+            {/* Quick Stats Summary */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div className="p-4 rounded-2xl bg-zinc-950/40 border border-white/5">
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-1">Interactive Catalog</span>
+                <span className="text-2xl font-black text-white">{DETAILED_SKILLS.length} validated units</span>
+              </div>
+              <div className="p-4 rounded-2xl bg-zinc-950/40 border border-white/5">
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-1">Active Filters</span>
+                <span className="text-2xl font-black text-emerald-400">{filteredSkills.length} matches</span>
+              </div>
+              <div className="p-4 rounded-2xl bg-zinc-950/40 border border-white/5">
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-1">Clinical Coverage</span>
+                <span className="text-2xl font-black text-emerald-400">80% Labs proven</span>
+              </div>
+              <div className="p-4 rounded-2xl bg-zinc-950/40 border border-white/5">
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-1">Lead Optimization</span>
+                <span className="text-2xl font-black text-orange-400">100% CRM Tracked</span>
+              </div>
+            </div>
+
+            {/* Grid of skill cards */}
+            {filteredSkills.length === 0 ? (
+              <div className="p-16 text-center rounded-3xl bg-zinc-950/20 border border-white/5">
+                <p className="text-zinc-500 text-sm">No skills found matching your active filter criteria.</p>
+                <button 
+                  onClick={() => { setSelectedCategory("All"); setSearchQuery(""); }}
+                  className="mt-4 px-4 py-2 bg-emerald-500/10 text-emerald-400 rounded-full text-xs hover:bg-emerald-500/20 transition-all font-semibold"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredSkills.map((skill, index) => (
+                  <motion.div
+                    key={skill.name}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.5 }}
+                    className="p-6 rounded-2xl bg-zinc-900/10 border border-white/5 hover:border-emerald-500/20 hover:bg-zinc-900/20 transition-all duration-300 flex flex-col justify-between group"
+                  >
+                    <div>
+                      {/* Category and Dot visual */}
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 flex items-center gap-1.5">
+                          <span className={`w-1.5 h-1.5 rounded-full ${
+                            skill.category === "Clinical & Molecular Diagnostics" ? "bg-emerald-500" :
+                            skill.category === "General Lab & QC" ? "bg-cyan-500" :
+                            skill.category === "Analytical & Academic" ? "bg-blue-500" :
+                            "bg-orange-500"
+                          }`} />
+                          {skill.category}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h4 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tight duration-300">
+                        {skill.name}
+                      </h4>
+
+                      {/* Optional Specific Role */}
+                      {skill.role && (
+                        <p className="text-xs font-medium text-emerald-500/70 mt-1 italic">
+                          As {skill.role}
+                        </p>
+                      )}
+
+                      {/* Description */}
+                      <p className="text-zinc-400 text-xs leading-relaxed mt-3">
+                        {skill.desc}
+                      </p>
+                    </div>
+
+                    {/* Associated Context Path */}
+                    <div className="mt-6 pt-4 border-t border-white/5">
+                      <span className="text-[9px] font-mono text-zinc-600 uppercase block mb-2 tracking-widest">
+                        // Verified Context
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {skill.contexts.map((context) => (
+                          <span 
+                            key={context} 
+                            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-zinc-950 text-[10px] text-zinc-500 hover:text-white border border-white/5 transition-colors font-medium cursor-default"
+                          >
+                            <Database size={8} className="text-emerald-500/60" /> {context}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+          </motion.div>
+        )}
+
+        {activePage === "tools" && (
+          <motion.div
+            key="tools-page"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Tools and Systems Section */}
+            <section id="tools" className="py-24 border-t border-white/5 relative bg-zinc-950/25 px-6 -mx-6">
+              <div className="max-w-4xl mx-auto">
+                {!user ? (
+                  /* Restricted Access View */
+                  <div className="text-center py-16 px-6 max-w-xl mx-auto space-y-8">
+                    <div className="relative inline-flex items-center justify-center p-6 rounded-3xl bg-zinc-900/40 border border-white/5 shadow-2xl">
+                      <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/10 to-transparent rounded-3xl pointer-events-none"></div>
+                      <Lock className="text-emerald-400 animate-pulse" size={40} />
+                    </div>
+
+                    <div className="space-y-3">
+                      <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block font-bold">// CLOUD SECURITY RESTRICTION</span>
+                      <h2 className="text-3xl font-extrabold text-white tracking-tight">
+                        Authorization Required
+                      </h2>
+                      <p className="text-zinc-400 text-sm leading-relaxed">
+                        To protect API usage and optimize lead indexing pipelines, the Google Maps Leads Explorer utility is protected by standard identity authorization.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-2xl border border-white/5 bg-zinc-950/40 text-xs text-zinc-500 max-w-md mx-auto flex items-start gap-3 text-left">
+                      <ShieldAlert className="text-emerald-500 shrink-0 mt-0.5" size={16} />
+                      <div className="space-y-1">
+                        <p className="font-semibold text-zinc-350">Identity verification takes 15 seconds</p>
+                        <p>Receive access instantly upon signup. Standard credentials can be simulated for demo purposes in offline environments.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                      <button
+                        onClick={() => { setAuthMode("signup"); setIsAuthModalOpen(true); }}
+                        className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-2xl text-xs uppercase tracking-wider transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.2)] focus:outline-none cursor-pointer border-none"
+                      >
+                        Sign Up Now
+                      </button>
+                      <button
+                        onClick={() => { setAuthMode("signin"); setIsAuthModalOpen(true); }}
+                        className="w-full sm:w-auto px-8 py-4 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-300 focus:outline-none cursor-pointer"
+                      >
+                        Sign In
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="mb-12">
+                  <span className="text-xs font-mono text-emerald-400 mb-4 block uppercase tracking-widest">// Interactive Staging Terminal</span>
+                  <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter">
+                    Google Maps Leads Explorer
+                  </h2>
+                  <p className="text-zinc-400 text-sm max-w-xl mt-3">
+                    Enter any query below to scan Google Maps live using your SerpAPI key and inspect automatically synthesized lead diagnostics and opportunities.
+                  </p>
+                </div>
+
+                {/* Console Input Card */}
+                <div className="p-6 md:p-8 rounded-3xl bg-zinc-900/20 border border-white/5 mb-10 shadow-2xl backdrop-blur-md relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-[1.5px] bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent"></div>
+                  
+                  <div className="flex flex-col md:flex-row items-stretch md:items-end gap-3.5 relative z-10">
+                    <div className="flex-1">
+                      <label className="text-[10px] font-mono text-emerald-500 uppercase tracking-wider block mb-2 font-semibold">// GOOGLE MAPS SEARCH PHRASE</label>
+                      <div className="relative">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
+                        <input
+                          type="text"
+                          value={geoSearchPhrase}
+                          onChange={(e) => setGeoSearchPhrase(e.target.value)}
+                          onKeyDown={(e) => { if (e.key === "Enter") handleExecuteGeoSearch(geoSearchPhrase); }}
+                          placeholder="e.g. coffee shops in London, clinics in Birmingham..."
+                          className="w-full bg-zinc-950/70 border border-white/10 rounded-2xl pl-11 pr-4 py-3.5 text-xs text-white focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all font-sans placeholder-zinc-650"
+                        />
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => handleExecuteGeoSearch(geoSearchPhrase)}
+                      disabled={isSearchingGeo || !geoSearchPhrase.trim()}
+                      className={`px-6 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
+                        isSearchingGeo 
+                          ? "bg-zinc-800 text-zinc-500 border border-white/5 cursor-not-allowed" 
+                          : "bg-emerald-500 hover:bg-emerald-400 text-black shadow-lg hover:shadow-emerald-500/20"
+                      }`}
+                    >
+                      <Activity size={12} className={isSearchingGeo ? "animate-spin" : ""} />
+                      {isSearchingGeo ? "Querying Maps..." : "Query SerpAPI"}
+                    </button>
+                  </div>
+
+                  {webhookStatus && (
+                    <div className="mt-4 px-3.5 py-2.5 rounded-xl bg-zinc-950/50 border border-white/5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 text-[10px] font-mono">
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span className="text-zinc-500 uppercase tracking-widest text-[9px]">CONNECTION STATE:</span>
+                        <span className="text-emerald-400">{webhookStatus}</span>
+                      </div>
+                      <span className="text-[9px] text-zinc-650">Engine: serpapi_google_maps_proxy</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Core Working Area */}
+                <AnimatePresence mode="wait">
+              {isSearchingGeo ? (
+                /* Scanning state view */
+                <motion.div
+                  key="loading-terminal"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.3 }}
+                  className="p-10 rounded-3xl bg-zinc-900/10 border border-emerald-500/20 text-center relative overflow-hidden h-[450px] flex flex-col justify-center items-center"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent pointer-events-none"></div>
+                  
+                  {/* Radar beacon sweep */}
+                  <div className="w-24 h-24 rounded-full border border-emerald-500/25 flex items-center justify-center mb-6 relative animate-pulse">
+                    <span className="absolute inset-0 rounded-full bg-emerald-500/5 animate-ping"></span>
+                    <FlaskConical className="text-emerald-400 animate-bounce" size={28} />
+                  </div>
+
+                  <div className="max-w-md space-y-3 font-mono">
+                    <h4 className="text-white text-sm font-bold tracking-tight uppercase animate-pulse">
+                      SECURE SOURCE ROUTING IN PROGRESS...
+                    </h4>
+                    
+                    {/* Fake terminal log stream based on active step */}
+                    <div className="p-4 rounded-xl bg-zinc-950/80 border border-white/5 text-left text-[11px] leading-relaxed text-zinc-400 font-mono space-y-1.5 w-full mx-auto max-w-sm shadow-inner">
+                      <p className="text-emerald-500 font-bold">// DUAL SYSTEM LOG FEED</p>
+                      
+                      {searchGeoStep >= 1 && (
+                        <p className="text-zinc-500 animate-pulse">
+                          &gt; [SOP CALIBRATION] Matching path criteria for "{geoSearchPhrase}"...
+                        </p>
+                      )}
+                      {searchGeoStep >= 2 && (
+                        <p className="text-emerald-400">
+                          &gt; [GEOGRAPHIC SCANNER] Coordinates localized. Mapping satellite overlay vectors...
+                        </p>
+                      )}
+                      {searchGeoStep >= 3 && (
+                        <p className="text-amber-400">
+                          &gt; [CRM DATA STRUCTURE] Modeling lead scores, acquisition pipelines & obstruction indices...
+                        </p>
+                      )}
+                      <p className="text-zinc-650 opacity-60">
+                        &gt; [INFRASTRUCTURE] Connection buffer encrypted. Standby...
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                /* Interactive Webhook Results Container */
+                activeGeoTargets.length > 0 && (
+                  <motion.div
+                    key="results-dashboard"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -15 }}
+                    transition={{ duration: 0.4 }}
+                    className="space-y-8 text-left mt-8"
+                  >
+                    {/* Header bar */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-white/5 pb-4 gap-4">
+                      <div>
+                        <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block mb-1">
+                          // SERPAPI GEOLOCATION REPORT
+                        </span>
+                        <h3 className="text-xl font-bold text-white tracking-tight">
+                          Analyzed Opportunities for &ldquo;{geoActiveQuery}&rdquo;
+                        </h3>
+                      </div>
+                      <div className="flex items-center gap-2 sm:self-center">
+                        <span className="text-[9px] font-mono bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-lg border border-emerald-500/20 uppercase tracking-wider">
+                          {activeGeoTargets.length} Record(s) Retrieved
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Left/Right splitting grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                      
+                      {/* Left: Dynamic Target List */}
+                      <div className="md:col-span-5 space-y-3">
+                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block font-bold">
+                          // IDENTIFIED PIPELINE OPPORTUNITIES
+                        </span>
+                        
+                        <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-800">
+                          {activeGeoTargets.map((target, idx) => {
+                            const isSelected = selectedTargetIndex === idx;
+                            return (
+                              <button
+                                key={`${target.name}-${idx}`}
+                                onClick={() => setSelectedTargetIndex(idx)}
+                                className={`w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer block ${
+                                  isSelected 
+                                    ? "bg-zinc-905/40 border-emerald-500/35 shadow-md shadow-emerald-500/5 translate-x-1" 
+                                    : "bg-zinc-950/20 border-white/5 hover:border-white/10 hover:bg-zinc-900/10"
+                                }`}
+                              >
+                                <div className="flex justify-between items-start gap-2">
+                                  <div className="space-y-1 min-w-0">
+                                    <span className="text-[9px] font-mono text-zinc-500 block truncate uppercase">
+                                      {target.sector}
+                                    </span>
+                                    <h4 className="text-sm font-bold text-white truncate group-hover:text-emerald-400">
+                                      {target.name}
+                                    </h4>
+                                  </div>
+                                  <span className={`text-[10px] font-mono font-bold shrink-0 ${
+                                    target.score >= 90 ? "text-emerald-400" : "text-amber-400"
+                                  }`}>
+                                    Score: {target.score}
+                                  </span>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Right: Selected Target Dossier Details */}
+                      <div className="md:col-span-7">
+                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-wider block font-bold mb-3">
+                          // OPPORTUNITY CRITERIA EXPLORER
+                        </span>
+
+                        {(() => {
+                          const target = activeGeoTargets[selectedTargetIndex];
+                          if (!target) return null;
+                          return (
+                            <div className="p-6 rounded-2xl bg-zinc-900/20 border border-white/5 space-y-5 relative">
+                              <div className="absolute top-0 right-0 p-4 text-[9px] font-mono text-zinc-650">
+                                RECORD INDEX: T-{selectedTargetIndex + 1}
+                              </div>
+
+                              <div>
+                                <span className="text-[9px] font-mono text-emerald-400 uppercase tracking-wider block mb-1">
+                                  {target.sector}
+                                </span>
+                                <h4 className="text-lg font-extrabold text-white tracking-tight leading-snug">
+                                  {target.name}
+                                </h4>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono pt-4 border-t border-white/5">
+                                {/* Email Field if present, else fallback contact person */}
+                                <div>
+                                  <span className="text-zinc-500 block text-[9px] uppercase tracking-wider mb-0.5">// Contact Point</span>
+                                  <span className="text-zinc-300 font-sans font-medium break-all selection:bg-emerald-500/30 block">
+                                    {target.email ? target.email.replace("The email found is: ", "") : target.contactPerson}
+                                  </span>
+                                </div>
+
+                                {/* Estimated Revenue / Commercial potential */}
+                                <div>
+                                  <span className="text-zinc-500 block text-[9px] uppercase tracking-wider mb-0.5">// Financial Potency</span>
+                                  <span className="text-emerald-400 block font-bold">
+                                    {target.estimatedRevPot}
+                                  </span>
+                                </div>
+
+                                {/* Website link if present */}
+                                {target.website && (
+                                  <div className="sm:col-span-2 border-t border-white/5 pt-2.5">
+                                    <span className="text-zinc-500 block text-[9px] uppercase tracking-wider mb-1">// Reference Website</span>
+                                    <a 
+                                      href={target.website} 
+                                      target="_blank" 
+                                      rel="noopener noreferrer" 
+                                      className="text-cyan-405 hover:text-cyan-300 hover:underline transition-all text-xs break-all block truncate font-sans font-medium"
+                                    >
+                                      {target.website}
+                                    </a>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Description, Objection Friction details */}
+                              <div className="space-y-3.5 border-t border-white/5 pt-4">
+                                {target.Description && target.Description !== "[null]" && (
+                                  <div className="p-3 bg-zinc-950/40 rounded-xl border border-white/5">
+                                    <span className="text-zinc-500 font-mono block text-[9px] uppercase tracking-wider mb-1">// Mapped Description</span>
+                                    <p className="text-zinc-350 font-sans text-xs leading-relaxed font-normal">
+                                      {target.Description}
+                                    </p>
+                                  </div>
+                                )}
+
+                                {target["About Business"] && target["About Business"] !== "[null]" && (
+                                  <div className="p-3 bg-zinc-950/40 rounded-xl border border-white/5">
+                                    <span className="text-zinc-500 font-mono block text-[9px] uppercase tracking-wider mb-1">// About Business Insights</span>
+                                    <p className="text-zinc-350 font-sans text-xs leading-relaxed font-normal">
+                                      {target["About Business"]}
+                                    </p>
+                                  </div>
+                                )}
+
+                                {(!target.Description && target.objectionFriction) && (
+                                  <div className="p-3 bg-amber-500/5 rounded-xl border border-amber-500/10">
+                                    <span className="text-amber-500/80 font-mono block text-[9px] uppercase tracking-wider mb-1">// CRM Pipeline Objection & Friction</span>
+                                    <p className="text-zinc-350 font-sans text-xs leading-relaxed font-normal">
+                                      {target.objectionFriction.replace(/^Description:\s*"/, "").replace(/"$/, "")}
+                                    </p>
+                                  </div>
+                                )}
+
+                                {target.clinicalAudit && (
+                                  <div className="p-3 bg-emerald-500/5 rounded-xl border border-emerald-500/10">
+                                    <span className="text-emerald-400/80 font-mono block text-[9px] uppercase tracking-wider mb-1">// Standard Operating Clinical SOP</span>
+                                    <p className="text-zinc-350 font-sans text-xs leading-relaxed font-normal">
+                                      {target.clinicalAudit}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+
+                            </div>
+                          );
+                        })()}
+                      </div>
+
+                    </div>
+
+                    {/* Highly discreet, elegant, interactive Raw JSON payload collapser */}
+                    <div className="pt-4 border-t border-white/5">
+                      <details className="group">
+                        <summary className="list-none flex justify-between items-center cursor-pointer select-none text-zinc-500 hover:text-white transition-colors duration-200 outline-none">
+                          <span className="text-[10px] font-mono uppercase tracking-wider font-bold block flex items-center gap-1.5">
+                            <span className="inline-block transition-transform duration-200 group-open:rotate-90">➔</span>
+                            // AUDIT RAW SERPAPI GEOLOCATION METRICS (response.json)
+                          </span>
+                          <span className="text-[10px] font-mono text-zinc-650 group-hover:text-emerald-400 transition-colors">
+                            Click to Expand Payload
+                          </span>
+                        </summary>
+                        
+                        <div className="mt-4 rounded-xl border border-white/5 bg-black/60 overflow-hidden shadow-inner">
+                          <div className="bg-zinc-950/80 px-4 py-2 border-b border-white/5 flex items-center justify-between">
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-2 h-2 rounded-full bg-zinc-800"></div>
+                              <div className="w-2 h-2 rounded-full bg-zinc-800"></div>
+                              <div className="w-2 h-2 rounded-full bg-zinc-800"></div>
+                            </div>
+                            <span className="font-mono text-[9px] text-zinc-650 uppercase">response.json</span>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (webhookRawResponse) {
+                                  navigator.clipboard.writeText(JSON.stringify(webhookRawResponse, null, 2));
+                                } else {
+                                  navigator.clipboard.writeText(JSON.stringify({ status: "Pending query initialization", activeQuery: geoActiveQuery }, null, 2));
+                                }
+                              }}
+                              className="text-[8px] font-mono text-zinc-400 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-white/5 px-2 py-0.5 rounded transition-colors cursor-pointer"
+                            >
+                              Copy Payload
+                            </button>
+                          </div>
+                          <pre className="font-mono text-[10px] leading-relaxed text-zinc-300 p-4 overflow-auto max-h-[350px] scrollbar-thin scrollbar-thumb-zinc-800">
+                            <code>
+                              {webhookRawResponse 
+                                ? JSON.stringify(webhookRawResponse, null, 2) 
+                                : JSON.stringify({ status: "Pending query initialization", activeQuery: geoActiveQuery }, null, 2)
+                              }
+                            </code>
+                          </pre>
+                        </div>
+                      </details>
+                    </div>
+
+                  </motion.div>
+                )
+              )}
+            </AnimatePresence>
+                  </>
+                )}
+              </div>
+            </section>
+
+          </motion.div>
+        )}
+
+        {activePage === "blog" && (
+          <motion.div
+            key="blog-page"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Blog Section */}
+            <section id="blog" className="py-32 border-t border-white/5 relative bg-zinc-950/20 px-6 -mx-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-16">
+               <span className="text-xs font-mono text-emerald-500 mb-6 block uppercase tracking-widest">// Brain Trust & Hybrid Insights</span>
+               <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9]">
+                 Intellectual Musings
+               </h2>
+               <p className="text-zinc-500 text-lg max-w-2xl mt-4">
+                 Where clinical analytical rigour, molecular protocols, and performance marketing pipelines converge.
+               </p>
+            </div>
+
+            {/* Blog Controls */}
+            <div className="flex flex-col lg:flex-row gap-6 justify-between items-stretch lg:items-center pb-8 border-b border-white/5 mb-10 text-xs">
+              <div className="flex flex-wrap gap-2">
+                {["All", "Clinical", "Marketing", "Precision Operations"].map((cat) => (
+                  <button
+                    key={cat}
+                    id={`blog-category-${cat.toLowerCase().replace(/\s+/g, '-')}`}
+                    onClick={() => setBlogCategory(cat)}
+                    className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 ${
+                      blogCategory === cat
+                        ? "bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.25)] font-bold cursor-pointer"
+                        : "bg-zinc-900/40 text-zinc-400 border border-white/5 hover:border-emerald-500/20 hover:text-white cursor-pointer"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+
+              <div className="relative w-full lg:max-w-xs">
+                <div className="absolute inset-y-0 left-3.5 flex items-center pointer-events-none text-zinc-500">
+                  <Search size={14} />
+                </div>
+                <input
+                  id="blog-search-input"
+                  type="text"
+                  placeholder="Search articles & themes..."
+                  value={blogSearch}
+                  onChange={(e) => setBlogSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-full bg-zinc-900/30 border border-white/5 focus:border-emerald-500/50 text-xs text-white placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 transition-all duration-300"
+                />
+              </div>
+            </div>
+
+            {/* Blog Grid */}
+            {filteredBlogPosts.length === 0 ? (
+              <div id="blog-empty-state" className="p-16 text-center rounded-3xl bg-zinc-950/20 border border-white/5">
+                <p className="text-zinc-500 text-sm">No articles match your selection.</p>
+                <button 
+                  id="blog-clear-filters"
+                  onClick={() => { setBlogCategory("All"); setBlogSearch(""); }}
+                  className="mt-4 px-4 py-2 bg-emerald-500/10 text-emerald-400 rounded-full text-xs hover:bg-emerald-500/20 transition-all font-semibold cursor-pointer"
+                >
+                  Reset blog search
+                </button>
+              </div>
+            ) : (
+              <div id="blog-grid" className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredBlogPosts.map((post) => (
+                  <div
+                    key={post.id}
+                    id={`blog-card-${post.id}`}
+                    onClick={() => setSelectedBlog(post)}
+                    className="group cursor-pointer p-8 rounded-3xl bg-zinc-900/15 border border-white/5 hover:border-emerald-500/20 hover:bg-zinc-900/25 transition-all duration-500 flex flex-col justify-between h-full"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-500/5 border border-emerald-500/10 px-2.5 py-0.5 rounded">
+                          {post.category}
+                        </span>
+                        <span className="text-zinc-500 text-[10px] font-mono flex items-center gap-1">
+                          <Clock size={10} /> {post.readTime}
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors duration-300 tracking-tight leading-snug line-clamp-2">
+                        {post.title}
+                      </h3>
+
+                      <p className="text-zinc-500 text-xs leading-relaxed mt-4 line-clamp-3">
+                        {post.summary}
+                      </p>
+                    </div>
+
+                    <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+                      <div className="flex flex-wrap gap-1">
+                        {post.tags.slice(0, 2).map(tag => (
+                          <span key={tag} className="text-[9px] font-mono text-zinc-650 uppercase tracking-wider">
+                            #{tag.replace(/\s+/g, '')}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-xs font-semibold text-emerald-500 group-hover:text-white transition-colors duration-300 flex items-center gap-1.5 font-sans">
+                        Read <ArrowRight size={14} className="transform group-hover:translate-x-1 transition-transform" />
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+          </motion.div>
+        )}
+
+        {activePage === "contact" && (
+          <motion.div
+            key="contact-page"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            <section id="footer" className="pt-32 pb-12">
+           <span className="text-sm font-mono text-emerald-500 mb-6 block uppercase tracking-widest">// Outreach</span>
+           
+           <div className="grid lg:grid-cols-12 gap-24 items-start mb-32">
+             <div className="lg:col-span-7">
+               <h2 className="text-5xl md:text-[80px] font-bold text-white tracking-tighter leading-[0.8] mb-12">
+                Let's construct something of <span className="text-emerald-400">precision.</span>
+               </h2>
+               <div className="space-y-8 text-lg text-zinc-500 leading-relaxed">
+                 <p>
+                    I'm open to conversations around <span className="text-white font-semibold">Medical Laboratory Assistance</span>, <span className="text-white font-semibold">Clinical Research Operations</span>, and <span className="text-white font-semibold">Performance Digital CRM Marketing</span>.
+                 </p>
+                 <p>
+                    Whether you need a meticulous wet-lab operator trained in DNA/RNA diagnostics or a performance marketer who understands database architectures, I bring clinical precision directly to the execution desk.
+                 </p>
+                 <p className="text-white font-semibold flex items-center gap-2">
+                   <PhoneCall size={18} className="text-emerald-500" /> Reach out to connect on biological science or performance pipelines.
+                 </p>
+               </div>
+             </div>
+
+             <div className="lg:col-span-5 space-y-12 w-full max-w-sm ml-auto">
+               <div className="aspect-[4/5] rounded-[40px] overflow-hidden shadow-2xl border border-white/5 max-w-sm">
+                 <img 
+                    src={olamideDavidProfile}
+                    referrerPolicy="no-referrer"
+                    alt="Olamide David portrait"
+                    className="w-full h-full object-cover"
+                 />
+               </div>
+
+               <div className="grid gap-8">
+                 <div>
+                   <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest mb-6 block">// Direct Access Channels</span>
+                   <div className="space-y-4">
+                     <div className="p-4 rounded-xl border border-white/5 bg-zinc-950/40 hover:border-emerald-500/20 transition-all">
+                        <p className="text-[9px] font-mono text-zinc-600 uppercase mb-1">Send Email</p>
+                        <a href="mailto:olamideruth387@gmail.com" className="text-white font-medium hover:text-emerald-400 transition-colors block">
+                          olamideruth387@gmail.com
+                        </a>
+                     </div>
+                     <div className="p-4 rounded-xl border border-white/5 bg-zinc-950/40 hover:border-emerald-500/20 transition-all">
+                        <p className="text-[9px] font-mono text-zinc-600 uppercase mb-1">LinkedIn Network</p>
+                        <a href="https://linkedin.com/in/olamidedavid" target="_blank" rel="noreferrer" className="text-white font-medium hover:text-emerald-400 transition-colors flex items-center justify-between">
+                          linkedin.com/in/olamidedavid <ArrowUpRight size={14} className="text-zinc-600" />
+                        </a>
+                     </div>
+                     <div className="p-4 rounded-xl border border-white/5 bg-zinc-950/40">
+                        <p className="text-[9px] font-mono text-zinc-600 uppercase mb-1">Current Base</p>
+                        <p className="text-white font-medium">
+                          Chester, England, United Kingdom
+                        </p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+
+           <div className="flex items-center justify-between border-t border-white/5 pt-12 text-[10px] font-mono text-zinc-700 uppercase tracking-[0.2em]">
+             <button 
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="hover:text-white transition-colors flex items-center gap-2 group"
+             >
+                <div className="w-6 h-6 rounded-full border border-white/10 flex items-center justify-center group-hover:border-white transition-colors transform group-hover:-translate-y-1">
+                  ↑
+                </div>
+                Back to top
+             </button>
+             <span>© 2026 Olamide David</span>
+            </div>
+          </section>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {activePage !== "contact" && (
+        <footer className="mt-16 py-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[10px] font-mono text-zinc-650 uppercase tracking-widest pb-12">
+          <span>Olamide David — Staging Portfolio</span>
+          <span>© 2026 All Rights Reserved</span>
+        </footer>
+      )}
+      </main>
+      {/*
+           </div>
+        </section>
+      </main>
+
+      */}{/* Blog Detail Overlay Modal */}
+      <AnimatePresence>
+        {selectedBlog && (
+          <div 
+            id="blog-modal-backdrop"
+            className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4 md:p-6"
+            onClick={() => setSelectedBlog(null)}
+          >
+            <motion.div
+              id="blog-modal-container"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.4 }}
+              className="w-full max-w-4xl bg-zinc-950 border border-white/10 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] relative mt-12 mb-12"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                id="blog-modal-close"
+                onClick={() => setSelectedBlog(null)}
+                className="absolute top-6 right-6 p-2 rounded-full border border-white/10 bg-zinc-900/60 text-zinc-400 hover:text-white hover:border-emerald-500/20 transition-all duration-300 z-10 cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+
+              {/* Modal Content */}
+              <div id="blog-modal-scroll-area" className="max-h-[85vh] overflow-y-auto p-8 md:p-12">
+                
+                {/* Header */}
+                <div className="space-y-4 mb-8">
+                  <div className="flex flex-wrap items-center gap-4 text-xs font-mono">
+                    <span className="text-emerald-400 uppercase tracking-widest px-2.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 font-bold">
+                      {selectedBlog.category}
+                    </span>
+                    <span className="text-zinc-500 flex items-center gap-1.5">
+                      <Calendar size={12} /> {selectedBlog.pubDate}
+                    </span>
+                    <span className="text-zinc-500 flex items-center gap-1.5">
+                      <Clock size={12} /> {selectedBlog.readTime}
+                    </span>
+                  </div>
+
+                  <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight uppercase font-sans">
+                    {selectedBlog.title}
+                  </h1>
+
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {selectedBlog.tags.map(tag => (
+                      <span key={tag} className="px-3 py-1 bg-zinc-900 border border-white/5 rounded-full text-[10px] text-zinc-505 text-zinc-500 uppercase tracking-widest font-mono">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Main Article Body */}
+                <div className="prose prose-invert max-w-none space-y-6">
+                  {selectedBlog.content.map((paragraph, idx) => (
+                    <p 
+                      key={idx} 
+                      className={`${idx === 0 ? "text-lg md:text-xl text-zinc-300 leading-relaxed font-light first-letter:text-5xl first-letter:font-black first-letter:text-emerald-400 first-letter:float-left first-letter:mr-3 first-letter:mt-1 font-sans" : "text-sm md:text-base text-zinc-400 leading-relaxed font-sans"}`}
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+
+                {/* Footer of Modal */}
+                <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10 bg-zinc-900">
+                      <img 
+                        src={olamideDavidProfile} 
+                        alt="Olamide David portrait" 
+                        className="w-full h-full object-cover" 
+                      />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-white">Olamide David</p>
+                      <p className="text-[10px] font-mono text-emerald-500/70 uppercase">Clinical Diagnostics & Performance CRM</p>
+                    </div>
+                  </div>
+
+                  <a
+                    id="blog-modal-share-linkedin"
+                    href={`https://www.linkedin.com/shareArticle?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(selectedBlog.title)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 px-4 py-2 bg-zinc-900 hover:bg-emerald-500 hover:text-black hover:border-emerald-500 text-zinc-300 font-bold text-xs rounded-full border border-white/5 transition-all duration-300"
+                  >
+                    <Linkedin size={14} /> Share on LinkedIn
+                  </a>
+                </div>
+
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Supabase Auth Modal Overlay */}
+      <AnimatePresence>
+        {isAuthModalOpen && (
+          <div 
+            id="auth-modal-backdrop"
+            className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 md:p-6"
+            onClick={() => {
+              if (!authLoading) {
+                setIsAuthModalOpen(false);
+                setAuthError(null);
+                setAuthSuccessMsg(null);
+              }
+            }}
+          >
+            <motion.div
+              id="auth-modal-container"
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.3 }}
+              className="w-full max-w-md bg-zinc-950 border border-white/5 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.9)] relative p-6 md:p-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => {
+                  setIsAuthModalOpen(false);
+                  setAuthError(null);
+                  setAuthSuccessMsg(null);
+                }}
+                disabled={authLoading}
+                className="absolute top-4 right-4 p-1.5 rounded-full border border-white/5 bg-zinc-900/60 text-zinc-400 hover:text-white hover:border-white/10 transition-all cursor-pointer disabled:opacity-50"
+              >
+                <X size={16} />
+              </button>
+
+              {/* Header */}
+              <div className="text-center mb-6">
+                <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block mb-1.5 font-bold">// SECURE REGISTRAR TERMINAL</span>
+                <h3 className="text-2xl font-bold text-white tracking-tight">
+                  {user 
+                    ? "Your Portal Profile" 
+                    : authMode === "signin" 
+                      ? "Sign In to Database" 
+                      : "Create Portal Account"
+                  }
+                </h3>
+                <p className="text-xs text-zinc-500 mt-1 max-w-xs mx-auto">
+                  {user 
+                    ? "You are logged in via Supabase secure authentication tier." 
+                    : "Connect, synchronize lead metadata, and access private clinic endpoints."
+                  }
+                </p>
+              </div>
+
+              {/* Status Info Badge */}
+              <div className="mb-6 p-3 rounded-xl border border-white/5 bg-zinc-900/40 flex items-center justify-between text-[11px] font-mono">
+                <div className="flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${isConfigured ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500 animate-pulse'}`}></div>
+                  <span className="text-zinc-400 uppercase">Provider Status:</span>
+                </div>
+                <span className={isConfigured ? 'text-emerald-400 font-semibold' : 'text-amber-400 font-semibold'}>
+                  {isConfigured ? 'Live Supabase API' : 'Sandbox Demo Mode'}
+                </span>
+              </div>
+
+              {!isConfigured && !user && (
+                <div className="mb-5 p-3.5 rounded-xl border border-dashed border-amber-500/20 bg-amber-500/5 text-xs space-y-2">
+                  <p className="font-semibold text-amber-400 flex items-center gap-1.5 font-mono">
+                    <ShieldAlert size={12} /> Key Setup Pending
+                  </p>
+                  <p className="text-zinc-400">
+                    Live Supabase keys are not configured. Standard operations are running in a **local offline sandbox with localStorage**.
+                  </p>
+                  <div className="pt-1.5 text-[10px] space-y-1 font-mono text-zinc-500 border-t border-white/5">
+                    <p className="text-white">// To enable full cloud storage, set:</p>
+                    <p>• <span className="text-amber-450 text-amber-400">VITE_SUPABASE_URL</span>: (Your project endpoint)</p>
+                    <p>• <span className="text-amber-450 text-amber-400">VITE_SUPABASE_ANON_KEY</span>: (Your anonymous key)</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Main Content Areas */}
+              {user ? (
+                /* Profile & Sign Out Page */
+                <div className="space-y-6">
+                  <div className="p-4 rounded-xl border border-white/5 bg-zinc-950/60 space-y-3.5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center font-bold text-emerald-400">
+                        {user.email.substring(0, 2).toUpperCase()}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-mono text-zinc-500 uppercase tracking-wider">// Authenticated Person</p>
+                        <p className="text-sm font-semibold text-white truncate">{user.email}</p>
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t border-white/5 grid grid-cols-2 gap-4 text-[10px] font-mono text-zinc-500">
+                      <div>
+                        <span className="block uppercase">// Session Mode</span>
+                        <span className={`font-semibold ${user.isSimulated ? 'text-amber-400' : 'text-emerald-400'}`}>
+                          {user.isSimulated ? 'Local Sandbox' : 'Cloud Session'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="block uppercase">// Access Level</span>
+                        <span className="text-white font-semibold">Standard Operator</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {authSuccessMsg && (
+                    <div className="p-3.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-450 text-emerald-400 font-semibold text-xs text-center flex items-center justify-center gap-2">
+                      <CheckCircle2 size={14} /> {authSuccessMsg}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleSignOut}
+                    disabled={authLoading}
+                    className="w-full py-3.5 bg-zinc-900 border border-white/5 font-bold hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400 text-zinc-300 rounded-xl text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {authLoading ? (
+                      <span className="w-4 h-4 border-2 border-zinc-400 border-t-transparent rounded-full animate-spin"></span>
+                    ) : (
+                      <>
+                        <LogOut size={13} />
+                        <span>Terminate Active Session</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              ) : (
+                /* Interactive Form Area */
+                <form onSubmit={handleAuthSubmit} className="space-y-4">
+                  <div>
+                    <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block mb-2 font-semibold">// Email Address Handle</label>
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={14} />
+                      <input
+                        type="email"
+                        value={authEmail}
+                        onChange={(e) => setAuthEmail(e.target.value)}
+                        placeholder="operator@clinical-sales.com"
+                        required
+                        disabled={authLoading}
+                        className="w-full bg-zinc-950 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500/30 transition-colors disabled:opacity-50"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block mb-2 font-semibold">// Access Security Password</label>
+                    <div className="relative">
+                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={14} />
+                      <input
+                        type="password"
+                        value={authPassword}
+                        onChange={(e) => setAuthPassword(e.target.value)}
+                        placeholder="••••••••••••"
+                        required
+                        minLength={6}
+                        disabled={authLoading}
+                        className="w-full bg-zinc-950 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500/30 transition-colors disabled:opacity-50"
+                      />
+                    </div>
+                  </div>
+
+                  {authMode === "signup" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <label className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider block mb-2 font-semibold">// Verify Security Password</label>
+                      <div className="relative">
+                        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={14} />
+                        <input
+                          type="password"
+                          value={authConfirmPassword}
+                          onChange={(e) => setAuthConfirmPassword(e.target.value)}
+                          placeholder="••••••••••••"
+                          required={authMode === "signup"}
+                          minLength={6}
+                          disabled={authLoading}
+                          className="w-full bg-zinc-950 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500/30 transition-colors disabled:opacity-50"
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {authError && (
+                    <div className="p-3.5 rounded-xl border border-red-500/20 bg-red-500/5 text-red-400 font-medium text-xs text-center">
+                      {authError}
+                    </div>
+                  )}
+
+                  {authSuccessMsg && (
+                    <div className="p-3.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 font-semibold text-xs text-center">
+                      {authSuccessMsg}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={authLoading}
+                    className="w-full py-3.5 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-xl text-xs uppercase tracking-wider transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.15)] cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 border-none"
+                  >
+                    {authLoading ? (
+                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
+                    ) : (
+                      <>
+                        <Key size={13} />
+                        <span>
+                          {authMode === "signin" ? "Authenticate Credentials" : "Issue Access Account"}
+                        </span>
+                      </>
+                    )}
+                  </button>
+
+                  <div className="text-center pt-2">
+                    <button
+                      type="button"
+                      disabled={authLoading}
+                      onClick={() => {
+                        setAuthMode(authMode === "signin" ? "signup" : "signin");
+                        setAuthError(null);
+                        setAuthSuccessMsg(null);
+                      }}
+                      className="text-[10px] font-mono text-zinc-550 text-zinc-500 hover:text-white transition-colors uppercase tracking-wider cursor-pointer focus:outline-none bg-transparent border-none"
+                    >
+                      {authMode === "signin" 
+                        ? "New User? Create custom operator account" 
+                        : "Already registered? Login via password"
+                      }
+                    </button>
+                  </div>
+                </form>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}

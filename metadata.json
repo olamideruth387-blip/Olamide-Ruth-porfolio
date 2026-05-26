@@ -1,0 +1,8 @@
+{
+  "name": "Olamide David Portfolio",
+  "description": "A premium personal portfolio for Olamide David, a senior UX executive featuring career highlights, expertise, and digital experiments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
