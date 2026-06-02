@@ -596,11 +596,16 @@ export default function App() {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   // --- Portfolio Database Integration & Realtime Sync ---
-  const [portfolioProject, setPortfolioProject] = useState<PortfolioProject | null>(null);
+  const [portfolioProjects, setPortfolioProjects] = useState<PortfolioProject[]>([]);
+  const [activeTabIndex, setActiveTabIndex] = useState<number>(0);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [isManualRefreshing, setIsManualRefreshing] = useState(false);
 
   const isConfigured = isSupabaseConfigured();
+
+  const portfolioProject = portfolioProjects.length > 0 
+    ? (portfolioProjects[activeTabIndex] !== undefined ? portfolioProjects[activeTabIndex] : portfolioProjects[0])
+    : null;
 
   const handleManualRefresh = async () => {
     setIsManualRefreshing(true);
@@ -610,6 +615,12 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (activeTabIndex >= portfolioProjects.length && portfolioProjects.length > 0) {
+      setActiveTabIndex(0);
+    }
+  }, [portfolioProjects, activeTabIndex]);
+
+  useEffect(() => {
     if (isConfigured) {
       // 1. Fetch the latest portfolio record from public.portfolio_projects
       const fetchPortfolio = async () => {
@@ -617,20 +628,19 @@ export default function App() {
           const { data, error } = await supabase
             .from("portfolio_projects")
             .select("*")
-            .order("updated_at", { ascending: false })
-            .limit(1);
+            .order("updated_at", { ascending: false });
 
           if (error) {
             console.warn("Supabase Fetch Warn:", error.message);
-            setPortfolioProject(null);
+            setPortfolioProjects([]);
           } else if (data && data.length > 0) {
-            setPortfolioProject(data[0]);
+            setPortfolioProjects(data as PortfolioProject[]);
           } else {
-            setPortfolioProject(null);
+            setPortfolioProjects([]);
           }
         } catch (err) {
           console.error("Failed to connect to portfolio table:", err);
-          setPortfolioProject(null);
+          setPortfolioProjects([]);
         }
       };
 
@@ -657,7 +667,7 @@ export default function App() {
         supabase.removeChannel(channel);
       };
     } else {
-      setPortfolioProject(null);
+      setPortfolioProjects([]);
     }
   }, [isConfigured, refreshTrigger]);
 
@@ -2092,10 +2102,79 @@ export default function App() {
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-20">
+                  <div className="space-y-12">
                     
-                    {/* Header Block */}
-                    <div className="space-y-6">
+                    {/* Project Workspace Tabs Selector */}
+                    <div className="border-b border-white/5 pb-8">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                        <div>
+                          <span className="text-[10px] font-mono text-emerald-400 block uppercase tracking-widest mb-1 select-none">
+                            // MULTI-ROW CONNECTION ({portfolioProjects.length} {portfolioProjects.length === 1 ? "Case Study" : "Case Studies"} Loaded)
+                          </span>
+                          <h2 className="text-xl md:text-2xl font-bold text-white uppercase font-sans tracking-tight">
+                            Select Case Archive
+                          </h2>
+                        </div>
+                        {/* Refetch / Refresh button */}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={handleManualRefresh}
+                            disabled={isManualRefreshing}
+                            className="px-4 py-2 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-400 font-mono text-[10px] uppercase tracking-wider rounded-lg border border-white/10 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                          >
+                            <Clock size={11} className={`${isManualRefreshing ? 'animate-spin text-emerald-400' : 'text-zinc-500'}`} />
+                            {isManualRefreshing ? "Syncing Workspace..." : "Refresh Database"}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Tab Buttons flexbox containing all projects */}
+                      <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+                        {portfolioProjects.map((proj, idx) => {
+                          const isActive = idx === activeTabIndex;
+                          return (
+                            <button
+                              key={proj.id || idx}
+                              onClick={() => setActiveTabIndex(idx)}
+                              className={`flex-shrink-0 text-left p-4 rounded-2xl border transition-all duration-300 cursor-pointer min-w-[220px] max-w-[280px] ${
+                                isActive 
+                                  ? "bg-zinc-900/80 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.08)]" 
+                                  : "bg-zinc-950/40 border-white/5 hover:border-white/10 hover:bg-zinc-900/20"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between gap-2 mb-2 font-mono text-[10px]">
+                                <span className={isActive ? "text-emerald-400 font-semibold" : "text-zinc-500"}>
+                                  [{String(idx + 1).padStart(2, '0')}]
+                                </span>
+                                <span className={`uppercase tracking-wider px-2 py-0.5 rounded-md text-[9px] ${
+                                  isActive ? "bg-emerald-500/10 text-emerald-400 font-semibold" : "bg-white/5 text-zinc-400"
+                                }`}>
+                                  {proj.client || "Client"}
+                                </span>
+                              </div>
+                              <h3 className={`text-xs font-bold line-clamp-1 uppercase ${isActive ? "text-white" : "text-zinc-400"}`}>
+                                {proj.title}
+                              </h3>
+                              <p className="text-[10px] text-zinc-500 line-clamp-1 mt-1">
+                                {proj.category}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={portfolioProject?.id || activeTabIndex}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -15 }}
+                        transition={{ duration: 0.25 }}
+                        className="space-y-20"
+                      >
+                        {/* Header Block */}
+                        <div className="space-y-6">
                       <div className="flex flex-wrap items-center gap-3">
                         <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest bg-emerald-500/5 border border-emerald-500/10 px-3 py-1 rounded-full">
                           {portfolioProject.category}
@@ -2445,6 +2524,9 @@ export default function App() {
                         Initiate Pipeline Consulting Connection
                       </button>
                     </div>
+
+                  </motion.div>
+                </AnimatePresence>
 
                   </div>
                 )}
