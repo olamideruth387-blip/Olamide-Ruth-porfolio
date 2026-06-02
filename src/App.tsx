@@ -59,6 +59,31 @@ export interface PortfolioProject {
   image_pipeline?: string | null;
 }
 
+export function getGoogleDriveEmbedUrl(url: string | null | undefined): string {
+  if (!url) return "";
+  const trimmedUrl = url.trim();
+  if (trimmedUrl.includes("drive.google.com") || trimmedUrl.includes("docs.google.com")) {
+    let fileId = "";
+    // Pattern 1: /file/d/FILE_ID/view or /file/d/FILE_ID/edit
+    const dPattern = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+    const match1 = trimmedUrl.match(dPattern);
+    if (match1 && match1[1]) {
+      fileId = match1[1];
+    } else {
+      // Pattern 2: ?id=FILE_ID or &id=FILE_ID
+      const idPattern = /[?&]id=([a-zA-Z0-9_-]+)/;
+      const match2 = trimmedUrl.match(idPattern);
+      if (match2 && match2[1]) {
+        fileId = match2[1];
+      }
+    }
+    if (fileId) {
+      return `https://lh3.googleusercontent.com/d/${fileId}`;
+    }
+  }
+  return trimmedUrl;
+}
+
 const EXPERTISE = [
   { id: "01", title: "Clinical Microbiology", desc: "Culturing, isolation, and biochemical identification of bacterial, fungal, and parasitic specimens." },
   { id: "02", title: "Molecular Diagnostics", desc: "DNA & RNA amplification and detection using Polymerase Chain Reaction (PCR)." },
@@ -2102,12 +2127,12 @@ export default function App() {
                         
                         {/* Visual 1: Traffic Trend Chart */}
                         <div 
-                          onClick={() => setLightboxImage(portfolioProject.image_traffic || trafficTrendChart)}
+                          onClick={() => setLightboxImage(getGoogleDriveEmbedUrl(portfolioProject.image_traffic || trafficTrendChart))}
                           className="group cursor-pointer p-6 rounded-3xl bg-zinc-900/15 border border-white/5 hover:border-emerald-500/35 hover:bg-zinc-900/25 transition-all duration-300 space-y-4"
                         >
                           <div className="aspect-[16/9] rounded-2xl overflow-hidden bg-zinc-950 border border-white/5 relative flex items-center justify-center">
                             <img 
-                              src={portfolioProject.image_traffic || trafficTrendChart} 
+                              src={getGoogleDriveEmbedUrl(portfolioProject.image_traffic || trafficTrendChart)} 
                               alt="Traffic Trend Curve 2024 - 2026" 
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                               referrerPolicy="no-referrer"
@@ -2128,12 +2153,12 @@ export default function App() {
 
                         {/* Visual 2: Channel Split Donut */}
                         <div 
-                          onClick={() => setLightboxImage(portfolioProject.image_channel || channelDistribution)}
+                          onClick={() => setLightboxImage(getGoogleDriveEmbedUrl(portfolioProject.image_channel || channelDistribution))}
                           className="group cursor-pointer p-6 rounded-3xl bg-zinc-900/15 border border-white/5 hover:border-emerald-500/35 hover:bg-zinc-900/25 transition-all duration-300 space-y-4"
                         >
                           <div className="aspect-[16/9] rounded-2xl overflow-hidden bg-zinc-950 border border-white/5 relative flex items-center justify-center">
                             <img 
-                              src={portfolioProject.image_channel || channelDistribution} 
+                              src={getGoogleDriveEmbedUrl(portfolioProject.image_channel || channelDistribution)} 
                               alt="B2B Channel Distribution Chart" 
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                               referrerPolicy="no-referrer"
@@ -2154,12 +2179,12 @@ export default function App() {
 
                         {/* Visual 3: Geographic Distribution Map */}
                         <div 
-                          onClick={() => setLightboxImage(portfolioProject.image_geo || geoDistribution)}
+                          onClick={() => setLightboxImage(getGoogleDriveEmbedUrl(portfolioProject.image_geo || geoDistribution))}
                           className="group cursor-pointer p-6 rounded-3xl bg-zinc-900/15 border border-white/5 hover:border-emerald-500/35 hover:bg-zinc-900/25 transition-all duration-300 space-y-4"
                         >
                           <div className="aspect-[16/9] rounded-2xl overflow-hidden bg-zinc-950 border border-white/5 relative flex items-center justify-center">
                             <img 
-                              src={portfolioProject.image_geo || geoDistribution} 
+                              src={getGoogleDriveEmbedUrl(portfolioProject.image_geo || geoDistribution)} 
                               alt="Global Engineering Hub Geographies Map" 
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                               referrerPolicy="no-referrer"
@@ -2180,12 +2205,12 @@ export default function App() {
 
                         {/* Visual 4: Dev Testing Pipeline Blueprint */}
                         <div 
-                          onClick={() => setLightboxImage(portfolioProject.image_pipeline || pipelineArchitecture)}
+                          onClick={() => setLightboxImage(getGoogleDriveEmbedUrl(portfolioProject.image_pipeline || pipelineArchitecture))}
                           className="group cursor-pointer p-6 rounded-3xl bg-zinc-900/15 border border-white/5 hover:border-emerald-500/35 hover:bg-zinc-900/25 transition-all duration-300 space-y-4"
                         >
                           <div className="aspect-[16/9] rounded-2xl overflow-hidden bg-zinc-950 border border-white/5 relative flex items-center justify-center">
                             <img 
-                              src={portfolioProject.image_pipeline || pipelineArchitecture} 
+                              src={getGoogleDriveEmbedUrl(portfolioProject.image_pipeline || pipelineArchitecture)} 
                               alt="Infrastructure workflow blueprint" 
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                               referrerPolicy="no-referrer"
