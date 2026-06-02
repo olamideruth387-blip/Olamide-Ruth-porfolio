@@ -597,8 +597,17 @@ export default function App() {
 
   // --- Portfolio Database Integration & Realtime Sync ---
   const [portfolioProject, setPortfolioProject] = useState<PortfolioProject | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [isManualRefreshing, setIsManualRefreshing] = useState(false);
 
   const isConfigured = isSupabaseConfigured();
+
+  const handleManualRefresh = async () => {
+    setIsManualRefreshing(true);
+    setRefreshTrigger((prev) => prev + 1);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setIsManualRefreshing(false);
+  };
 
   useEffect(() => {
     if (isConfigured) {
@@ -608,7 +617,7 @@ export default function App() {
           const { data, error } = await supabase
             .from("portfolio_projects")
             .select("*")
-            .order("created_at", { ascending: false })
+            .order("updated_at", { ascending: false })
             .limit(1);
 
           if (error) {
@@ -638,12 +647,8 @@ export default function App() {
             table: "portfolio_projects"
           },
           (payload) => {
-            console.log("Realtime payload received for portfolio_projects:", payload);
-            if (payload.eventType === "DELETE") {
-              setPortfolioProject(null);
-            } else if (payload.new && Object.keys(payload.new).length > 0) {
-              setPortfolioProject(payload.new as PortfolioProject);
-            }
+            console.log("Realtime payload received for portfolio_projects. Performing self-healing refetch:", payload);
+            fetchPortfolio(); // Always refetch from the source of truth to ensure absolute parity
           }
         )
         .subscribe();
@@ -654,7 +659,7 @@ export default function App() {
     } else {
       setPortfolioProject(null);
     }
-  }, [isConfigured]);
+  }, [isConfigured, refreshTrigger]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" as any });
@@ -1970,17 +1975,121 @@ export default function App() {
             <section id="portfolio" className="py-24 border-t border-white/5 relative bg-zinc-950/20 px-6 -mx-6">
               <div className="max-w-6xl mx-auto">
                 {!portfolioProject ? (
-                  <div className="text-center py-24 px-6 border border-white/5 bg-zinc-900/10 rounded-3xl max-w-2xl mx-auto space-y-6">
-                    <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto">
-                      <Database className="text-emerald-400" size={24} />
+                  <div className="max-w-3xl mx-auto space-y-8">
+                    <div className="text-center py-16 px-6 border border-white/5 bg-zinc-900/10 rounded-3xl space-y-6">
+                      <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto">
+                        <Database className="text-emerald-400" size={24} />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-center gap-2">
+                          <span className={`w-2 h-2 rounded-full ${isConfigured ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+                          <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">
+                            {isConfigured ? "Supabase Live Connection Active" : "Simulated Local Storage Mode"}
+                          </p>
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-bold text-white uppercase font-sans tracking-tight">No Portfolio Projects Found</h3>
+                      </div>
+                      <p className="text-zinc-400 text-sm max-w-lg mx-auto leading-relaxed">
+                        To keep your site clean and customized, only rows present in your Supabase database table will render here. All static fallbacks have been filtered out.
+                      </p>
+
+                      <div className="flex justify-center gap-4 pt-2">
+                        <button
+                          onClick={handleManualRefresh}
+                          disabled={isManualRefreshing}
+                          className="px-6 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white font-mono text-xs uppercase tracking-wider rounded-full border border-white/10 transition-all duration-300 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                        >
+                          <Clock size={12} className={`text-emerald-400 ${isManualRefreshing ? 'animate-spin' : ''}`} />
+                          {isManualRefreshing ? "Syncing..." : "Manual DB Refetch"}
+                        </button>
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest">// Database Synchronized Mode</p>
-                      <h3 className="text-xl font-bold text-white uppercase font-sans tracking-tight">No Database Portfolio Found</h3>
+
+                    {/* Diagnostics & Real-time Integration Steps */}
+                    <div className="p-8 rounded-3xl bg-zinc-900/30 border border-white/5 space-y-6 font-sans">
+                      <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                        <h4 className="font-mono text-xs text-emerald-400 uppercase tracking-widest flex items-center gap-2">
+                          <Activity size={14} /> Real-Time Database Connection Troubleshooter
+                        </h4>
+                        <span className="text-[10px] font-mono text-zinc-500">v1.1 Active Diagnostics</span>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-6 text-xs text-zinc-400">
+                        <div className="space-y-4">
+                          <h5 className="font-bold text-white uppercase text-[10px] tracking-wider">// Connection State</h5>
+                          <div className="space-y-2 bg-black/40 p-4 rounded-xl border border-white/5 font-mono text-[11px]">
+                            <div className="flex justify-between">
+                              <span className="text-zinc-500">Supabase API Key:</span>
+                              <span className={isConfigured ? "text-emerald-400" : "text-amber-500"}>
+                                {isConfigured ? "✓ Configured (Secret)" : "Missing (Using Local DB)"}
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-zinc-500">Target Table:</span>
+                              <span className="text-zinc-300">public.portfolio_projects</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-zinc-500">Realtime Engine:</span>
+                              <span className={isConfigured ? "text-emerald-400" : "text-zinc-500"}>
+                                {isConfigured ? "Active Listener Connected" : "Inactive (Simulated)"}
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-zinc-500">Query Sort Index:</span>
+                              <span className="text-zinc-300">updated_at DESC (Live)</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <h5 className="font-bold text-white uppercase text-[10px] tracking-wider">// Checklist to make changes reflect</h5>
+                          <ul className="space-y-2.5 leading-relaxed">
+                            <li className="flex items-start gap-2">
+                              <span className="text-emerald-400 font-semibold mt-0.5">1.</span>
+                              <span>
+                                <strong>Ensure table has records:</strong> Check if you have running rows in <code className="text-emerald-400 font-mono text-[10.5px] bg-emerald-500/5 px-1 rounded">portfolio_projects</code>. Rows are sorted by last updated!
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-emerald-400 font-semibold mt-0.5">2.</span>
+                              <span>
+                                <strong>Enable Supabase Replication (Crucial):</strong> Go to your **Supabase Dashboard** &rarr; **Database** &rarr; **Replication**, look under **Source**, choose your active publication (usually `supabase_realtime`), and make sure `portfolio_projects` is **toggled ON** to broadcast!
+                              </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="text-emerald-400 font-semibold mt-0.5">3.</span>
+                              <span>
+                                <strong>Confirm RLS Read Access:</strong> Ensure your table has a SELECT policy allowing public read access, or verify your query isn't blocked by Row Level Security constraints.
+                              </span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      {/* Pasteable SQL Seeding Snippet */}
+                      <div className="space-y-3 pt-4 border-t border-white/5">
+                        <div className="flex justify-between items-center">
+                          <h5 className="font-bold text-white uppercase text-[10px] tracking-wider">// SQL Seeding Snippet (Run in Supabase SQL Editor if table is empty)</h5>
+                        </div>
+                        <pre className="bg-black/90 p-4 rounded-xl border border-white/5 text-[10px] font-mono text-zinc-400 overflow-x-auto leading-relaxed max-h-40">
+{`INSERT INTO public.portfolio_projects (
+    title, excerpt, category, story_date, challenge, strategy, impact, client, reading_time, stat_value, stat_name
+) VALUES (
+    'The B2B Engineering Pipeline: Converting Technical Audiences for a Core AI Infrastructure Tool',
+    'How we navigated long enterprise consideration cycles to transform an initial Q3 2024 viral spike into a highly stabilized, premium global developer footprint.',
+    'Technical B2B & Developer Relations (DevRel)',
+    'May 2024 – April 2026',
+    'Marketing kusho.ai...',
+    'We abandoned mass-consumer playbooks...',
+    'The targeted execution yielded a highly deliberate, sustainable traffic structure...',
+    'kusho.ai',
+    '4 minutes',
+    '68.28%',
+    'Combined US and India Traffic Share Dominance'
+);`}
+                        </pre>
+                      </div>
                     </div>
-                    <p className="text-zinc-400 text-xs max-w-md mx-auto leading-relaxed">
-                      Only data inserted in your Supabase table will render here. All other default or hardcoded fallback data has been removed. Insert/update a row in your <code className="text-emerald-400 font-mono text-[10px] bg-emerald-500/5 px-1.5 py-0.5 rounded border border-emerald-500/10">portfolio_projects</code> table to see it instantly render in real-time.
-                    </p>
                   </div>
                 ) : (
                   <div className="space-y-20">
