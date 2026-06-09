@@ -2,7 +2,7 @@ export interface BlogPost {
   id: string;
   slug: string;
   title: string;
-  category: "Clinical" | "Marketing" | "Precision Operations";
+  category: "Analytics" | "Marketing" | "CRM Automation";
   pubDate: string;
   readTime: string;
   summary: string;
@@ -14,8 +14,8 @@ export const BLOG_POSTS: BlogPost[] = [
   {
     id: "01",
     slug: "diagnostic-gaze-microscopy-to-crm-funnel",
-    title: "The Diagnostic Gaze: Applying Brightfield Microscopy to CRM Funnel Drift",
-    category: "Precision Operations",
+    title: "The Diagnostic Gaze: Applying Analytical Microscopy to CRM Funnel Drift",
+    category: "CRM Automation",
     pubDate: "May 18, 2026",
     readTime: "5 min read",
     summary: "How analyzing user drop-off trends with the same microscopic discipline required for bacterial cell-wall classification reveals patterns hidden in standard marketing metrics.",
@@ -31,7 +31,7 @@ export const BLOG_POSTS: BlogPost[] = [
     id: "02",
     slug: "pcr-versus-pipeline-qc",
     title: "PCR Optimization vs. CRM Database Hygiene: Preventing Attributal Amplification",
-    category: "Clinical",
+    category: "Analytics",
     pubDate: "April 24, 2026",
     readTime: "6 min read",
     summary: "Preventing 'primer-dimer' errors in molecular diagnostics teaches you the absolute importance of sterile environments. The same exact rigor keeps your CRM data pipelines clean of duplicate attribution clutter.",

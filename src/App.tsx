@@ -209,7 +209,7 @@ const EDUCATION = [
       "Exploring immune responses, immune system disorders, and the development of vaccines.",
       "Application of biotechnology techniques such as genetic engineering and various imaging technologies that play a crucial role in research and clinical applications."
     ],
-    skills: ["Collaborative Problem Solving", "Cross-functional Team Leadership", "Drug Biology", "Translational Research"]
+    skills: ["Collaborative Problem Solving", "Cross-functional Team Leadership", "Systematic Research", "Data Modeling"]
   },
   {
     id: "02",
@@ -222,7 +222,7 @@ const EDUCATION = [
       "Foundational coursework across specialized sectors including medical bacteriology, virology, immunology, and mycology.",
       "Hands-on microbiology wet-lab protocols, agar preparation, safety regulations, and aseptic diagnostic cultivation."
     ],
-    skills: ["General Lab", "Aseptic Culturing", "Gram Staining", "Pathogen Assays"]
+    skills: ["Analytical Rigor", "Methodical Execution", "Technical Documentation", "Quality Control Protocols"]
   }
 ];
 
@@ -271,156 +271,96 @@ const CERTIFICATIONS = [
   }
 ];
 
-const DETAILED_SKILLS = [
+const DETAILED_SKILLS: Array<{ name: string; category: string; contexts: string[]; desc: string; role?: string }> = [
   {
-    name: "Troubleshooting",
-    category: "General Lab & QC",
+    name: "Pipeline Troubleshooting",
+    category: "CRM & Automation",
     contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
-    desc: "Systematically identifying and repairing technical failures in molecular assays, diagnostic devices, and laboratory workflows; resolving data segmentation issues in CRM campaigns."
+    desc: "Systematically debugging technical errors in automated multi-step sequences, fixing API handshakes, and diagnosing data segmentation bottlenecks in HubSpot and Salesforce campaigns."
   },
   {
-    name: "General Lab",
-    category: "General Lab & QC",
-    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
-    desc: "Classic analytical assays, pH systems management, solution preparation, equipment calibration, serial dilutions, block sterilizations, and rigorous safety compliance across top institutions."
+    name: "Performance Marketing",
+    category: "Campaign Optimization",
+    contexts: ["Performance Marketing", "University of Chester"],
+    desc: "Deploying data-driven B2B customer acquisition campaigns, refining ad messaging layouts, and scaling ROI by weeding out redundant channels."
   },
   {
-    name: "Teamwork",
-    category: "Management & Growth",
-    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
-    desc: "Collaborating with multi-disciplinary pathologists, doctors, clinical operators, and growth marketers to expedite workflows and ensure alignment on complex deliverables."
-  },
-  {
-    name: "Molecular Biology",
-    category: "Analytical & Academic",
-    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
-    desc: "Studying protein dynamics, nucleic acid extraction (DNA, RNA), genetic engineering concepts, and analyzing structural molecules within biological pathways."
-  },
-  {
-    name: "Laboratory Skills",
-    category: "General Lab & QC",
-    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
-    desc: "Mastery of wet-lab techniques, COSHH safety, aseptic practice, clinical sample tracking, precise micro-pipetting, and quality-controlled documentation."
-  },
-  {
-    name: "culture methods",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Clinical Microbiologist",
-    contexts: ["Federal Medical Centre"],
-    desc: "Inoculation and incubation of bacterial, fungal, and parasitic specimens using selective and differential media to isolate pathogens."
-  },
-  {
-    name: "gram staining and interpretation",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Clinical Microbiologist",
-    contexts: ["Federal Medical Centre"],
-    desc: "Preparing heat-fixed bacterial smears, applying crystal violet/safranin protocol, and using oil-immersion brightfield microscopy to analyze cell walls."
-  },
-  {
-    name: "pathogen Isolation",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Clinical Microbiologist",
-    contexts: ["Federal Medical Centre"],
-    desc: "Isolating complex infective strains from patient specimens, executing pure colony transfers, and carrying out primary identification assays."
-  },
-  {
-    name: "Microbial Identification",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Clinical Microbiologist",
-    contexts: ["Federal Medical Centre"],
-    desc: "Running selective catalase, coagulase, and oxidase bio-chemical matrices to pinpoint bacteria, yeast, and mold down to genus/species level."
-  },
-  {
-    name: "Selective media and biochamical assay",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Clinical Microbiologist",
-    contexts: ["Federal Medical Centre"],
-    desc: "Formulating specialty agar lines (MacConkey, Blood, Chocolate) and performing automated/manual identification panel assays index cards."
-  },
-  {
-    name: "Molecular Diagnostics",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Medical laboratory Assistant",
-    contexts: ["Maryam Memorial Clinic and Maternity"],
-    desc: "Preparing cDNA libraries, conducting PCR thermal profiles, and validating fluorescence markers to make direct clinical determinations."
-  },
-  {
-    name: "Sample Analysis and interpretation",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Medical laboratory Assistant",
-    contexts: ["Maryam Memorial Clinic and Maternity"],
-    desc: "Screening blood, urine, or tissue samples, detecting morphology shifts, and completing rigorous quality control checkmarks before pathogen sign-off."
-  },
-  {
-    name: "Clinical Microbiology",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Medical laboratory Assistant",
-    contexts: ["Maryam Memorial Clinic and Maternity"],
-    desc: "Applying sterile techniques and biosafety rules to handle highly hazardous infections and coordinate findings with state/clinic databases."
-  },
-  {
-    name: "Customer Relationship Management (CRM)",
-    category: "Management & Growth",
+    name: "Email Automations",
+    category: "CRM & Automation",
     contexts: ["Performance Marketing"],
-    desc: "Structuring segmentation, configuring follow-up pathways, tracking lead values, and aligning client objection data with ongoing campaign structures."
+    desc: "Configuring high-converting trigger actions, personalized customer journeys, automated newsletter templates, and cold pipeline follow-up sequences."
   },
   {
-    name: "Time Management",
-    category: "Management & Growth",
+    name: "Search Engine Optimization (SEO)",
+    category: "Campaign Optimization",
+    contexts: ["Performance Marketing"],
+    desc: "Improving ranking visibility with detailed on-page structural schemas, optimizing core web vitals, and producing user-centric search-focused documentation."
+  },
+  {
+    name: "CRM Architecture",
+    category: "CRM & Automation",
     contexts: ["Performance Marketing", "Maryam Memorial Clinic and Maternity"],
-    desc: "Coordinating rapid-turnaround tests to lower patient wait times by 20% while handling remote execution schedules for freelance marketing operations."
+    desc: "Structuring contact fields, deal stages, and smart custom object records so executive teams have a single source of truth for all pipeline metrics."
   },
   {
-    name: "ELISA",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Laboratory Assistant",
+    name: "Copywriting & Copy Audit",
+    category: "Campaign Optimization",
+    contexts: ["Performance Marketing"],
+    desc: "Applying Johnny Thompson direct-response strategies and the AIDA formula to turn stale website sections into compelling, high-converting copy that hooks the reader."
+  },
+  {
+    name: "B2B Lead Generation",
+    category: "Campaign Optimization",
+    contexts: ["Performance Marketing"],
+    desc: "Operating automated target prospecting trackers, scrapers, and predictive scoring rules to systematically capture qualified enterprise signups."
+  },
+  {
+    name: "Web Development",
+    category: "CRM & Automation",
+    contexts: ["University of Chester", "Performance Marketing"],
+    desc: "Building clean, secure, and lightning-fast custom landing page experiences in React and Node.js with scalable backend configurations."
+  },
+  {
+    name: "Marketing Analytics",
+    category: "Analytics & Strategy",
+    contexts: ["Performance Marketing", "University of Chester"],
+    desc: "Evaluating email click-through rates, advertising conversion ratios, and pipeline velocity metrics to calculate precise multi-channel ROI."
+  },
+  {
+    name: "Competitive Market Research",
+    category: "Analytics & Strategy",
     contexts: ["University of Chester"],
-    desc: "Performing Enzyme-Linked Immunosorbent Assays to detect and quantify antibodies, hormones, and peptides in biological specimens with plate readers."
+    desc: "Compiling comprehensive B2B buyer behavior data, performing competitive gap audits, and finding messaging opportunities within crowded sectors."
   },
   {
-    name: "Polymerase Chain Reaction (PCR)",
-    category: "Clinical & Molecular Diagnostics",
-    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity"],
-    desc: "Hands-on thermal cycling, target gene amplification, qualitative and quantitative PCR analysis, and troubleshooting primer dimer errors."
+    name: "Data Reporting & Visual Dashboards",
+    category: "Analytics & Strategy",
+    contexts: ["University of Chester", "Performance Marketing"],
+    desc: "Designing easy-to-read performance reports and customized interactive dashboards that display live customer journey telemetry."
   },
   {
-    name: "Research Skills",
-    category: "Analytical & Academic",
-    role: "Laboratory Assistant",
-    contexts: ["University of Chester"],
-    desc: "Compiling translating trial logs, conducting epidemiological data collection, and formulating literature reviews on biomedical action paths."
+    name: "Conversion Rate Optimization (CRO)",
+    category: "Analytics & Strategy",
+    contexts: ["Performance Marketing"],
+    desc: "Executing rapid A/B testing on pricing layouts, button positions, and risk-reversing copy elements based on detailed user activity patterns."
   },
   {
-    name: "Reporting & Analysis",
-    category: "Analytical & Academic",
-    role: "Laboratory Assistant",
-    contexts: ["University of Chester"],
-    desc: "Authoring clinical reports, logging structural DNA findings, interpreting absorption spectra, and producing metrics models for active academic researchers."
-  },
-  {
-    name: "Bioassay",
-    category: "Clinical & Molecular Diagnostics",
-    role: "Laboratory Assistant",
-    contexts: ["University of Chester"],
-    desc: "Executing in vitro models to measure the comparative potency and toxicity profiles of drug candidates on designated pathway cells."
-  },
-  {
-    name: "Analytical Skills",
-    category: "Analytical & Academic",
-    contexts: ["University of Chester"],
-    desc: "Dissecting molecular drug dynamics, performing quantitative curves, mapping statistical error spreads, and resolving structural protein discrepancies."
+    name: "Team Leadership & Direct Training",
+    category: "Management & Growth",
+    contexts: ["Performance Marketing", "University of Chester"],
+    desc: "Training staff, aligning communication across developer squads, and ensuring marketing operations execute key business milestones on schedule."
   },
   {
     name: "Collaborative Problem Solving",
     category: "Management & Growth",
-    contexts: ["University of Chester"],
-    desc: "Uniting with academic PIs and clinical laboratory technicians to tackle experimental bottlenecks, troubleshoot ELISA anomalies, and align research."
+    contexts: ["University of Chester", "Performance Marketing"],
+    desc: "Working with product leads, design teams, and system engineers to debug pipeline blockages and optimize the digital user journey."
   },
   {
-    name: "Cross-functional Team Leadership",
+    name: "Cross-functional Alignment",
     category: "Management & Growth",
     contexts: ["University of Chester"],
-    desc: "Serving as a Postgraduate Student Liaison to direct communication channels between university departments, cohorts, and clinical staff."
+    desc: "Acting as an intermediary between sales, product, and technical development groups to keep complex B2B projects synchronized."
   }
 ];
 
@@ -1628,7 +1568,7 @@ export default function App() {
                  Skills & Practice Matrix
                </h2>
                <p className="text-zinc-500 text-lg max-w-2xl mt-4">
-                 A comprehensive layout of validated technical proficiencies mapped directly to proven performance across clinical labs and digital growth setups.
+                 A comprehensive layout of validated technical proficiencies mapped directly to proven performance across enterprise B2B pipelines, CRM installations, and digital growth setups.
                </p>
             </div>
 
@@ -1636,7 +1576,7 @@ export default function App() {
             <div className="flex flex-col lg:flex-row gap-6 justify-between items-stretch lg:items-center pb-8 border-b border-white/5 mb-10">
               {/* Category selector */}
               <div className="flex flex-wrap gap-2">
-                {["All", "Clinical & Molecular Diagnostics", "General Lab & QC", "Analytical & Academic", "Management & Growth"].map((cat) => (
+                {["All", "Campaign Optimization", "CRM & Automation", "Analytics & Strategy", "Management & Growth"].map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
@@ -1677,8 +1617,8 @@ export default function App() {
                 <span className="text-2xl font-black text-emerald-400">{filteredSkills.length} matches</span>
               </div>
               <div className="p-4 rounded-2xl bg-zinc-950/40 border border-white/5">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-1">Clinical Coverage</span>
-                <span className="text-2xl font-black text-emerald-400">80% Labs proven</span>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-1">Pipeline Velocity</span>
+                <span className="text-2xl font-black text-emerald-400">100% Data-Driven</span>
               </div>
               <div className="p-4 rounded-2xl bg-zinc-950/40 border border-white/5">
                 <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-1">Lead Optimization</span>
@@ -1713,10 +1653,10 @@ export default function App() {
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 flex items-center gap-1.5">
                           <span className={`w-1.5 h-1.5 rounded-full ${
-                            skill.category === "Clinical & Molecular Diagnostics" ? "bg-emerald-500" :
-                            skill.category === "General Lab & QC" ? "bg-cyan-500" :
-                            skill.category === "Analytical & Academic" ? "bg-blue-500" :
-                            "bg-orange-500"
+                            skill.category === "Campaign Optimization" ? "bg-emerald-500" :
+                            skill.category === "CRM & Automation" ? "bg-orange-500" :
+                            skill.category === "Analytics & Strategy" ? "bg-blue-500" :
+                            "bg-cyan-500"
                           }`} />
                           {skill.category}
                         </span>
@@ -2738,14 +2678,14 @@ export default function App() {
                  Intellectual Musings
                </h2>
                <p className="text-zinc-500 text-lg max-w-2xl mt-4">
-                 Where clinical analytical rigour, molecular protocols, and performance marketing pipelines converge.
+                 Where precise campaign analysis, CRM automation systems, and performance marketing pipelines converge.
                </p>
             </div>
 
             {/* Blog Controls */}
             <div className="flex flex-col lg:flex-row gap-6 justify-between items-stretch lg:items-center pb-8 border-b border-white/5 mb-10 text-xs">
               <div className="flex flex-wrap gap-2">
-                {["All", "Clinical", "Marketing", "Precision Operations"].map((cat) => (
+                {["All", "Analytics", "Marketing", "CRM Automation"].map((cat) => (
                   <button
                     key={cat}
                     id={`blog-category-${cat.toLowerCase().replace(/\s+/g, '-')}`}
