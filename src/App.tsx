@@ -85,66 +85,113 @@ export function getGoogleDriveEmbedUrl(url: string | null | undefined): string {
 }
 
 const EXPERTISE = [
-  { id: "01", title: "Clinical Microbiology", desc: "Culturing, isolation, and biochemical identification of bacterial, fungal, and parasitic specimens." },
-  { id: "02", title: "Molecular Diagnostics", desc: "DNA & RNA amplification and detection using Polymerase Chain Reaction (PCR)." },
-  { id: "03", title: "Microscopic Analysis", desc: "Proficient with brightfield, phase contrast, and fluorescence microscopy to identify cellular morphology." },
-  { id: "04", title: "Performance Marketing", desc: "Customer insight integration, objection mapping, and performance optimization." },
-  { id: "05", title: "CRM Data Structuring", desc: "Lead qualification, contact segmentation, and systematic pipeline follow-up configurations." },
-  { id: "06", title: "Biochemical Assays", desc: "Hands-on expertise in ELISA, Gram staining, enzymatic assays, titrations, and dilutions." },
-  { id: "07", title: "Epidemiological Studies", desc: "Assisting in translating clinical trials data to analyze drug impacts on biological pathways." },
-  { id: "08", title: "Lab Safety & Compliance", desc: "Ensuring deep alignment with quality control standards, clean workflows, and safety protocols." },
+  { id: "01", title: "Marketing Strategy", desc: "Stop guessing. You'll get systematic B2B campaigns that turn cold objections directly into highly resonant messaging that drives conversions." },
+  { id: "02", title: "Email Marketing", desc: "Nurture your leads automatically. You'll turn cold signups into warm prospects with automated email flows that do the heavy lifting for you." },
+  { id: "03", title: "Leadership Development", desc: "Empower your team. Let's train your departments, streamline coordination, and supercharge quality so you hit every critical commercial deadline." },
+  { id: "04", title: "Web Development", desc: "Get a secure, blazing-fast web experience. You'll have highly responsive pages and ironclad backends engineered specifically to convert your traffic." },
+  { id: "05", title: "Business Analytics", desc: "Stop staring at confusing layouts. You can easily visualize metrics, spot leaks in your sales funnel, and boost your absolute ROI." },
+  { id: "06", title: "Content Marketing", desc: "Speak directly to your reader's buying motives. You'll get sharp case studies and copywriting designed to make people trust you instantly." },
+  { id: "07", title: "Lead Generation", desc: "Keep your pipeline flooded. You can plug automated outreach and lead scoring systems in to secure high-value sales calls while you sleep." },
+  { id: "08", title: "Search Engine Optimization (SEO)", desc: "Be the answer when your customers search. You'll gain organic flow with crisp technical page optimization and high-authority visibility." }
 ];
 
 const EXPERIENCE = [
   {
     id: "01",
-    role: "Freelance | Self-Employed",
-    company: "Performance Marketing",
-    period: "Aug 2025 - Present \u00b7 10 mos",
+    role: "Customer Insight and CRM focused Performance Marketing",
+    company: "Freelance | Self-Employed",
+    period: "Aug 2025 - Present \u00b7 11 mos",
     location: "Chester, England, United Kingdom \u00b7 Remote",
-    description: "Fed customer objections back into marketing campaigns to improve messaging alignment. Structured CRM data systematically to enable better lead qualification, segmentation and automated follow-up pathways, driving measurable growth.",
-    category: "marketing",
-    tags: ["CRM Data", "Lead Qualification", "Segmentation", "Marketing Strategy"]
+    description: "Feed customer objections back into marketing campaigns to improve messaging alignment. Structured CRM data to enable better lead qualification, segmentation and follow-up.",
+    bullets: [],
+    category: "CRM & Performance",
+    tags: ["Customer Insight", "CRM", "Performance Marketing", "Lead Qualification", "Segmentation", "Objection Mapping"]
   },
   {
     id: "02",
-    role: "Laboratory Assistant",
-    company: "University of Chester",
-    period: "Jan 2024 - Present \u00b7 2 yrs 5 mos",
-    location: "Chester, England, United Kingdom \u00b7 Internship",
-    description: "Focused on the extrapolation and study of molecular structures within proteins (DNA, RNA). Conducted rigorous investigations into how pharmacophores and therapeutic drugs interact with biological systems, pathways, and potential side effects. Contributed to epidemiological studies on active clinical trials and translational research.",
-    category: "clinical",
-    tags: ["Molecular Biology", "DNA/RNA Structures", "ELISA", "PCR", "Epidemiology"]
+    role: "Lead Generation and Email Automation",
+    company: "Kushika Ventures",
+    period: "Jan 2025 - May 2026 \u00b7 1 yr 5 mos",
+    location: "Remote \u00b7 Full-time",
+    description: "Fostered dynamic commercial scalability through technical setup of highly-responsive automation channels and email outreach.",
+    bullets: [
+      "Carried out day-to-day duties accurately and efficiently.",
+      "Quickly learned and applied new skills to daily tasks, improving efficiency and productivity.",
+      "Successfully delivered on tasks within tight deadlines.",
+      "Offered friendly, efficient customer service and handled challenging situations with ease.",
+      "Increased customer satisfaction by resolving issues.",
+      "Cleaned work areas and equipment to maintain faultless hygiene standards."
+    ],
+    category: "Automation & Growth",
+    tags: ["Lead Generation", "Email Automation", "Customer Satisfaction", "Teamwork", "Efficiency"]
   },
   {
     id: "03",
-    role: "Medical Laboratory Assistant",
-    company: "Maryam Memorial Clinic and Maternity",
-    period: "Sep 2021 - Aug 2023 \u00b7 2 yrs",
-    location: "Nigeria \u00b7 On-site",
-    description: "Conducted exhaustive microscopic analyses of clinical samples, utilizing sophisticated brightfield, phase contrast, and fluorescence microscopy methodologies. Performed manual and real-time Polymerase Chain Reaction (PCR) molecular protocols for infectious diseases diagnosis. Collaborated daily with multidisciplinary pathologists and researchers while improving overall sample turnaround times by 20%.",
-    category: "clinical",
-    tags: ["PCR Diagnosis", "Microscopy Technique", "Sample Processing", "Turnaround Optimization"]
+    role: "Custom CRM and Performance Marketing",
+    company: "SOSV",
+    period: "Feb 2024 - Jan 2026 \u00b7 2 yrs",
+    location: "Remote \u00b7 Consulting",
+    description: "Designed bespoke pipeline architectures and client consultation patterns to maximize satisfaction and retention rates.",
+    bullets: [
+      "Managed multiple projects simultaneously whilst ensuring timely completion and quality control.",
+      "Recommended improvements on business processes for optimised performance and profitability.",
+      "Liaised closely with clients throughout consulting process, ensuring satisfaction at every stage.",
+      "Organised training sessions to enhance team performance.",
+      "Implemented CRM systems to streamline operations.",
+      "Participated actively in business strategy meetings, contributing valuable insights from a customer perspective."
+    ],
+    category: "CRM & Performance",
+    tags: ["Project Management", "Consulting", "Process Optimization", "CRM Setup", "Business Strategy"]
   },
   {
     id: "04",
-    role: "Clinical Microbiologist",
-    company: "Federal Medical Centre",
-    period: "Jun 2020 - Sep 2021 \u00b7 1 yr 4 mos",
-    location: "Nigeria \u00b7 On-site",
-    description: "Identified pathogens securely using critical culture methods on bacterial, fungal, and parasitic specimens with selective media and customized biochemical assays. Applied professional Gram staining techniques to classify complex bacterial isolates. Successfully coordinated clinical findings with medical and nursing staff to streamline diagnostic paths and clinical care plan efficiency.",
-    category: "clinical",
-    tags: ["Selective Media", "Bioassays", "Pathogen Isolation", "Gram Staining"]
+    role: "User Experience Designer",
+    company: "RepuShield",
+    period: "Jan 2022 - Nov 2025 \u00b7 3 yrs 11 mos",
+    location: "Remote",
+    description: "Elevated standard metrics of user engagement by combining usability research insights with high-fidelity interactive wireframes.",
+    bullets: [
+      "Improved site navigation by redesigning layout based on usability testing results.",
+      "Conceptualised innovative site features, improving customer retention rates.",
+      "Augmented brand identity through consistent UI elements across platforms.",
+      "Developed wireframes, resulting in clear project visualisations.",
+      "Led UX research initiatives, providing valuable insights into user behaviour and preferences.",
+      "Delivered high-impact visuals using advanced graphic software tools."
+    ],
+    category: "UX & UI Design",
+    tags: ["UX Research", "Usability Testing", "Wireframing", "Brand Identity", "Site Navigation"]
   },
   {
     id: "05",
-    role: "Laboratory Assistant",
-    company: "Marleyshree Pharmaceutical Limited",
-    period: "Mar 2019 - May 2020 \u00b7 1 yr 3 mos",
-    location: "Nigeria \u00b7 On-site",
-    description: "Assisted in analytical assays for finished pharmaceutical products, validating concentrations and pharmacokinetics. Performed classic laboratory assays including titrations, exact pH measurements, and controlled clinical sample serial dilutions, upholding highest standards of team documentation.",
-    category: "clinical",
-    tags: ["Pharmacokinetics", "Titration Assay", "Serial Dilution", "Equipment Calibration"]
+    role: "Full Stack Engineer",
+    company: "CustomFitForMe",
+    period: "Jan 2024 - Feb 2025 \u00b7 1 yr 2 mos",
+    location: "On-site \u00b7 Full-time",
+    description: "Built robust backend services and implemented responsive frontend client components to secure end-to-end data pipelines.",
+    bullets: [
+      "Built robust backend services, improving data security and integrity.",
+      "Collaborated closely with cross-functional teams to ensure seamless integration of front-end and back-end functionalities.",
+      "Enhanced user experience by implementing responsive web design principles."
+    ],
+    category: "Technical & Engineering",
+    tags: ["Backend Services", "Full Stack Development", "Data Security", "Responsive Design", "Troubleshooting", "Teamwork"]
+  },
+  {
+    id: "06",
+    role: "Automation Engineer",
+    company: "TRleadershipHub",
+    period: "Sep 2021 - Aug 2023 \u00b7 2 yrs",
+    location: "Nigeria \u00b7 On-site \u00b7 Full-time",
+    description: "Applied precision designs using advanced automation and modeling tools to secure budget constraints and teach junior developers.",
+    bullets: [
+      "Implemented sustainable building practices, promoting environmental responsibility.",
+      "Presented design proposals to clients for approval and modification requests.",
+      "Utilised advanced software tools like CAD and BIM for precision in designs.",
+      "Managed budget constraints whilst maintaining high standards of design excellence.",
+      "Assisted junior architects in their projects, fostering a learning environment at work."
+    ],
+    category: "Technical & Engineering",
+    tags: ["CAD / BIM", "Sustainable Design", "Budget Optimization", "Troubleshooting", "Teamwork"]
   }
 ];
 
@@ -176,6 +223,51 @@ const EDUCATION = [
       "Hands-on microbiology wet-lab protocols, agar preparation, safety regulations, and aseptic diagnostic cultivation."
     ],
     skills: ["General Lab", "Aseptic Culturing", "Gram Staining", "Pathogen Assays"]
+  }
+];
+
+const CERTIFICATIONS = [
+  {
+    id: "01",
+    title: "Principles of B2B Sales and Marketing",
+    issuer: "Alison",
+    date: "Issued May 2026",
+    hasCredential: true
+  },
+  {
+    id: "02",
+    title: "Products and services Management",
+    issuer: "Alison",
+    date: "Issued May 2026",
+    hasCredential: true
+  },
+  {
+    id: "03",
+    title: "Product Marketing and Go to Market Strategy",
+    issuer: "Wiley",
+    date: "Issued May 2026",
+    hasCredential: true
+  },
+  {
+    id: "04",
+    title: "Marketing Automation with Ai and Hubspot",
+    issuer: "Coursera",
+    date: "Issued May 2026",
+    hasCredential: true
+  },
+  {
+    id: "05",
+    title: "Building AI Agents",
+    issuer: "Packt",
+    date: "Issued May 2026",
+    hasCredential: true
+  },
+  {
+    id: "06",
+    title: "AI in digital marketing",
+    issuer: "University of Maryland",
+    date: "Issued May 2026",
+    hasCredential: false
   }
 ];
 
@@ -592,7 +684,7 @@ function extractRawItems(raw: any): any[] {
 }
 
 export default function App() {
-  const [activePage, setActivePage] = useState<"about" | "specialisation" | "experience" | "tools" | "portfolio" | "blog" | "contact">("about");
+  const [activePage, setActivePage] = useState<"about" | "services" | "experience" | "tools" | "portfolio" | "blog" | "contact">("about");
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   // --- Portfolio Database Integration & Realtime Sync ---
@@ -993,7 +1085,7 @@ export default function App() {
           <div className="hidden md:flex items-center gap-3 lg:gap-6 text-[10px] lg:text-xs font-semibold uppercase tracking-wider">
             {[
               { id: "about", label: "About" },
-              { id: "specialisation", label: "Specialisation" },
+              { id: "services", label: "Services" },
               { id: "experience", label: "Experience" },
               { id: "tools", label: "Tools" },
               { id: "portfolio", label: "Portfolio" },
@@ -1051,7 +1143,7 @@ export default function App() {
             <div className="flex flex-col gap-4 text-base font-bold uppercase tracking-wider text-zinc-400">
               {[
                 { id: "about", label: "About" },
-                { id: "specialisation", label: "Specialisation & Skills" },
+                { id: "services", label: "Services & Skills" },
                 { id: "experience", label: "Experience & Education" },
                 { id: "tools", label: "Tools & Terminal" },
                 { id: "portfolio", label: "Portfolio" },
@@ -1196,10 +1288,32 @@ export default function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 1 }}
-                className="text-xl md:text-2xl text-zinc-400 font-light leading-relaxed max-w-lg"
+                className="text-xl md:text-2xl text-zinc-400 font-light leading-relaxed max-w-xl"
               >
-                Bringing uncompromising precision of clinical laboratory science into data-driven performance marketing.
+                You're paying high database fees for contacts that sit there and rot in your CRM. Let's fix that. You'll get standard-setting analytical precision applied directly to your sales funnel to qualify, segment, and convert your leads.
               </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.8 }}
+                className="pt-4 space-y-4"
+              >
+                <div className="flex flex-wrap items-center gap-4">
+                  <button
+                    onClick={() => setActivePage("contact")}
+                    className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold uppercase tracking-wider text-xs rounded-full transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-105 cursor-pointer border-none"
+                  >
+                    Claim Your Free 15-Minute Pipeline Audit
+                  </button>
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/5 px-3 py-1 rounded border border-emerald-500/10 font-bold uppercase tracking-widest animate-pulse">
+                    Only 3 spots left this week
+                  </span>
+                </div>
+                <p className="text-[10px] font-mono text-zinc-500">
+                  ⚡ Completely free. A raw, honest breakdown of your pipeline leakages. No strings attached.
+                </p>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -1212,41 +1326,41 @@ export default function App() {
              viewport={{ once: true }}
              className="max-w-4xl"
           >
-            <span className="text-xs font-mono text-zinc-650 tracking-wider mb-2 block uppercase">// PERSPECTIVE</span>
+            <span className="text-xs font-mono text-zinc-650 tracking-wider mb-2 block uppercase">// YOUR ADVANTAGE</span>
             <p className="text-2xl md:text-4xl lg:text-5xl font-light text-zinc-100 leading-tight">
-              I operate at the intersection of <span className="text-emerald-400 font-medium font-sans">rigorous molecular diagnostics</span> and <span className="text-orange-400 font-medium font-mono">high-performing CRM marketing</span> — where analytical precision drives real-world outcomes.
+              You don't need another generic agencies speaking fluff. You need a standard of <span className="text-emerald-400 font-medium font-sans">absolute, analytical precision</span> that turns your messy CRM data into <span className="text-orange-400 font-medium font-mono">predictable, ready-to-buy pipelines</span>.
             </p>
           </motion.div>
         </section>
       </motion.div>
     )}
 
-        {activePage === "specialisation" && (
+        {activePage === "services" && (
           <motion.div
-            key="specialisation-page"
+            key="services-page"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Expertise Grid */}
-        <section id="specialisation" className="py-32 relative">
+            {/* Services Grid */}
+        <section id="services" className="py-32 relative">
           <div className="grid lg:grid-cols-12 gap-16">
             <div className="lg:col-span-5">
-              <span className="text-xs font-mono text-zinc-600 mb-6 block uppercase tracking-widest">// Capability Set</span>
-              <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-8">
-                Areas of<br />
-                <span className="text-emerald-500">Specialisation.</span>
+              <span className="text-xs font-mono text-emerald-500 mb-6 block uppercase tracking-widest">// Scalable Solutions</span>
+              <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] mb-8 animate-fadeIn">
+                How you can<br />
+                <span className="text-emerald-400 font-sans">scale today.</span>
               </h2>
-              <p className="text-zinc-500 max-w-sm text-base leading-relaxed mb-12">
-                A dual proficiency combining high-level clinical medicine/microbiology procedures with sophisticated metrics-driven sales funnel optimization.
+              <p className="text-zinc-400 max-w-sm text-base leading-relaxed mb-12">
+                Stop losing warm, ready-to-buy prospects to messy trackers or weak email setup. You'll get systematic CRM alignment, automated email sequences, and high-performance digital marketing campaigns.
               </p>
 
               <div className="relative w-full aspect-video rounded-3xl overflow-hidden bg-zinc-900 group">
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
                 <img 
                   src={expertiseBg} 
-                  alt="Analytical and Diagnostic Focus"
+                  alt="Professional Services & Execution"
                   className="w-full h-full object-cover opacity-40 grayscale group-hover:scale-105 transition-transform duration-1000"
                 />
               </div>
@@ -1286,7 +1400,7 @@ export default function App() {
                  Professional Experience
                </h2>
                <p className="text-zinc-500 text-lg max-w-2xl mt-4">
-                 A robust record of medical diagnostic assistance and strategic campaign support characterized by meticulous attention to detail.
+                 A robust record of performance marketing, CRM development, user experience design, and automation engineering.
                </p>
             </div>
 
@@ -1302,7 +1416,7 @@ export default function App() {
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xs font-mono text-zinc-600 font-bold">{job.id}</span>
                         <span className="text-[10px] uppercase px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 font-bold tracking-wider">
-                          {job.category === "clinical" ? "Clinical Research" : "Digital CRM"}
+                          {job.category}
                         </span>
                       </div>
                       <p className="text-sm font-semibold text-zinc-400">{job.period}</p>
@@ -1314,8 +1428,8 @@ export default function App() {
                     {/* Role Description */}
                     <div className="lg:col-span-9 space-y-4">
                       <div>
-                        <h3 className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors flex items-center gap-3">
-                          {job.role}
+                        <h3 className="text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors flex flex-wrap items-center gap-2 md:gap-3">
+                          <span>{job.role}</span>
                           <span className="text-zinc-500 font-light text-xl">/</span>
                           <span className="text-lg font-medium text-emerald-500/90">{job.company}</span>
                         </h3>
@@ -1323,6 +1437,17 @@ export default function App() {
                       <p className="text-zinc-400 text-sm leading-relaxed max-w-3xl">
                         {job.description}
                       </p>
+
+                      {job.bullets && job.bullets.length > 0 && (
+                        <ul className="list-none space-y-2 mt-4 pl-0">
+                          {job.bullets.map((bullet, bIdx) => (
+                            <li key={bIdx} className="text-zinc-400 text-xs leading-relaxed flex items-start gap-2 max-w-3xl">
+                              <span className="text-emerald-500 font-bold select-none mt-0.5">▪</span>
+                              <span>{bullet}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
 
                       <div className="flex flex-wrap gap-2 pt-2">
                         {job.tags.map(tag => (
@@ -1422,10 +1547,71 @@ export default function App() {
           </div>
         </section>
 
+        {/* Licenses & Certifications Section */}
+        <section id="certifications" className="py-32 border-t border-white/5 relative bg-zinc-950/10 px-6 -mx-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-20">
+               <span className="text-xs font-mono text-emerald-500 mb-6 block uppercase tracking-widest">// Professional Credentials</span>
+               <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9]">
+                 Licenses &amp; Certifications
+               </h2>
+               <p className="text-zinc-500 text-lg max-w-2xl mt-4">
+                 Industry-recognized credentials validating execution standards in B2B performance marketing, product strategy, and AI systems.
+               </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {CERTIFICATIONS.map((cert) => (
+                <div 
+                  key={cert.id}
+                  className="group p-6 rounded-2xl bg-zinc-900/10 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 hover:bg-zinc-900/20 flex flex-col justify-between h-full animate-fadeIn"
+                >
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-start">
+                      <div className="p-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/10 transition-colors">
+                        <Award size={18} />
+                      </div>
+                      <span className="text-[10px] font-mono text-zinc-600 font-bold">
+                        [{cert.id}]
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <h3 className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors line-clamp-2 uppercase min-h-[40px]">
+                        {cert.title}
+                      </h3>
+                      <p className="text-emerald-500/90 font-medium text-xs">
+                        {cert.issuer}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-white/5 mt-4 flex items-center justify-between text-[11px]">
+                    <div className="flex items-center gap-1.5 text-zinc-500 font-mono">
+                      <Calendar size={12} className="text-zinc-600" />
+                      <span>{cert.date}</span>
+                    </div>
+
+                    {cert.hasCredential ? (
+                      <span className="flex items-center gap-1 text-emerald-400 font-mono text-[10px] font-semibold bg-emerald-500/5 hover:bg-emerald-500/15 border border-emerald-500/10 px-2.5 py-1 rounded-md transition-colors cursor-pointer select-none">
+                        Show credential <ArrowUpRight size={10} />
+                      </span>
+                    ) : (
+                      <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest bg-zinc-950 px-2 py-1 rounded border border-white/5 font-semibold">
+                        Accredited
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
           </motion.div>
         )}
 
-        {activePage === "specialisation" && (
+        {activePage === "services" && (
           <motion.div
             key="skills-matrix-page"
             initial={{ opacity: 0, y: 15 }}
