@@ -31,6 +31,9 @@ import {
   ArrowRight
 } from "lucide-react";
 import { BLOG_POSTS, BlogPost } from "./data/blog";
+import { Certificate } from "./types";
+import { CERTIFICATIONS } from "./data/certifications";
+import CertificateModal from "./components/CertificateModal";
 import olamideDavidProfile from "./assets/images/olamide_david_profile_custom.png";
 import expertiseBg from "./assets/images/olamide_david_profile_custom.png";
 import trafficTrendChart from "./assets/images/traffic_trend_chart_1780020783149.png";
@@ -226,50 +229,7 @@ const EDUCATION = [
   }
 ];
 
-const CERTIFICATIONS = [
-  {
-    id: "01",
-    title: "Principles of B2B Sales and Marketing",
-    issuer: "Alison",
-    date: "Issued May 2026",
-    hasCredential: true
-  },
-  {
-    id: "02",
-    title: "Products and services Management",
-    issuer: "Alison",
-    date: "Issued May 2026",
-    hasCredential: true
-  },
-  {
-    id: "03",
-    title: "Product Marketing and Go to Market Strategy",
-    issuer: "Wiley",
-    date: "Issued May 2026",
-    hasCredential: true
-  },
-  {
-    id: "04",
-    title: "Marketing Automation with Ai and Hubspot",
-    issuer: "Coursera",
-    date: "Issued May 2026",
-    hasCredential: true
-  },
-  {
-    id: "05",
-    title: "Building AI Agents",
-    issuer: "Packt",
-    date: "Issued May 2026",
-    hasCredential: true
-  },
-  {
-    id: "06",
-    title: "AI in digital marketing",
-    issuer: "University of Maryland",
-    date: "Issued May 2026",
-    hasCredential: false
-  }
-];
+// CERTIFICATIONS imported dynamically from src/data/certifications.ts
 
 const DETAILED_SKILLS: Array<{ name: string; category: string; contexts: string[]; desc: string; role?: string }> = [
   {
@@ -624,8 +584,9 @@ function extractRawItems(raw: any): any[] {
 }
 
 export default function App() {
-  const [activePage, setActivePage] = useState<"about" | "services" | "experience" | "tools" | "portfolio" | "blog" | "contact">("about");
+  const [activePage, setActivePage] = useState<"about" | "services" | "experience" | "certifications" | "tools" | "portfolio" | "blog" | "contact">("about");
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
 
   // --- Portfolio Database Integration & Realtime Sync ---
   const [portfolioProjects, setPortfolioProjects] = useState<PortfolioProject[]>([]);
@@ -1027,6 +988,7 @@ export default function App() {
               { id: "about", label: "About" },
               { id: "services", label: "Services" },
               { id: "experience", label: "Experience" },
+              { id: "certifications", label: "Certifications" },
               { id: "tools", label: "Tools" },
               { id: "portfolio", label: "Portfolio" },
               { id: "blog", label: "Publications" },
@@ -1085,6 +1047,7 @@ export default function App() {
                 { id: "about", label: "About" },
                 { id: "services", label: "Services & Skills" },
                 { id: "experience", label: "Experience & Education" },
+                { id: "certifications", label: "Certifications" },
                 { id: "tools", label: "Tools & Terminal" },
                 { id: "portfolio", label: "Portfolio" },
                 { id: "blog", label: "Publications" },
@@ -1504,11 +1467,12 @@ export default function App() {
               {CERTIFICATIONS.map((cert) => (
                 <div 
                   key={cert.id}
-                  className="group p-6 rounded-2xl bg-zinc-900/10 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 hover:bg-zinc-900/20 flex flex-col justify-between h-full animate-fadeIn"
+                  onClick={() => setSelectedCert(cert)}
+                  className="group p-6 rounded-2xl bg-zinc-900/10 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 hover:bg-zinc-900/20 flex flex-col justify-between h-full animate-fadeIn cursor-pointer"
                 >
                   <div className="space-y-4">
                     <div className="flex justify-between items-start">
-                      <div className="p-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/10 transition-colors">
+                      <div className="p-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
                         <Award size={18} />
                       </div>
                       <span className="text-[10px] font-mono text-zinc-600 font-bold">
@@ -1524,6 +1488,55 @@ export default function App() {
                         {cert.issuer}
                       </p>
                     </div>
+
+                    {/* Miniature interactive preview thumb representation of certificate */}
+                    <div className="relative mt-3 aspect-[1.414/1] w-full rounded-lg bg-zinc-950 border border-white/10 p-2.5 overflow-hidden group-hover:border-emerald-500/20 transition-all flex flex-col justify-between text-[4px] leading-tight select-none">
+                      {cert.logoType === "alison" ? (
+                        <div className="h-full flex gap-1 text-[2.5px]">
+                          <div className="w-1/4 h-full bg-emerald-500/15 border-r border-emerald-500/10 flex flex-col justify-between py-1 -mt-2 -mb-2 -ml-2">
+                            <div className="w-2.5 h-2.5 rounded-full border border-emerald-500/30 flex items-center justify-center bg-white mx-auto mt-1 text-[2.5px] font-sans font-bold text-emerald-700 p-0.5">CPD</div>
+                            <span className="text-[2.5px] text-center font-mono text-zinc-500">2026</span>
+                          </div>
+                          <div className="flex-1 flex flex-col justify-between pl-1">
+                            <div className="flex justify-between font-sans">
+                              <span className="font-bold text-emerald-400 text-[3.5px]">Alison</span>
+                              <span className="text-zinc-600 font-mono text-[2.5px]">CPD Validated</span>
+                            </div>
+                            <div className="text-center font-sans space-y-0.5">
+                              <span className="block text-[3.5px] font-bold text-zinc-300">OLAMIDE RUTH DAVID</span>
+                              <span className="block text-[2px] text-zinc-500 uppercase max-w-[80px] mx-auto truncate font-sans">{cert.title}</span>
+                            </div>
+                            <div className="flex justify-between text-[2px] text-zinc-600">
+                              <span>ID: {cert.verifyId}</span>
+                              <span className="italic">Authorized Sign</span>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="h-full flex flex-col justify-between text-[2.5px] border border-white/5 p-1 relative">
+                          <div className="flex justify-between items-center border-b border-white/5 pb-0.5 font-sans">
+                            <span className="font-bold text-zinc-300 uppercase">{cert.issuer.split(" & ")[0]}</span>
+                            <span className="text-sky-400 text-[3.5px] font-serif italic text-right">coursera</span>
+                          </div>
+                          <div className="text-center space-y-0.5 py-1">
+                            <span className="block text-[3.5px] font-black text-zinc-200">Olamide Ruth David</span>
+                            <span className="block text-[2px] text-zinc-500 font-sans max-w-[120px] mx-auto truncate leading-tight uppercase font-medium">{cert.title}</span>
+                          </div>
+                          <div className="flex justify-between items-end text-[2px] text-zinc-600">
+                            <span>{cert.date}</span>
+                            <span className="text-[2.5px] text-sky-400 font-semibold font-mono">Verify Cert</span>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Cool Hover zoom overlay icon hint */}
+                      <div className="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="px-2.5 py-1 rounded bg-emerald-500 text-black font-sans font-bold text-[8px] uppercase tracking-wider flex items-center gap-1 shadow-md">
+                          Read Certificate <ArrowUpRight size={8} />
+                        </span>
+                      </div>
+                    </div>
+
                   </div>
 
                   <div className="pt-4 border-t border-white/5 mt-4 flex items-center justify-between text-[11px]">
@@ -1532,15 +1545,9 @@ export default function App() {
                       <span>{cert.date}</span>
                     </div>
 
-                    {cert.hasCredential ? (
-                      <span className="flex items-center gap-1 text-emerald-400 font-mono text-[10px] font-semibold bg-emerald-500/5 hover:bg-emerald-500/15 border border-emerald-500/10 px-2.5 py-1 rounded-md transition-colors cursor-pointer select-none">
-                        Show credential <ArrowUpRight size={10} />
-                      </span>
-                    ) : (
-                      <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest bg-zinc-950 px-2 py-1 rounded border border-white/5 font-semibold">
-                        Accredited
-                      </span>
-                    )}
+                    <span className="flex items-center gap-1 text-emerald-400 font-mono text-[10px] bg-emerald-500/5 hover:bg-emerald-500/15 border border-emerald-500/10 px-2.5 py-1 rounded-md transition-colors font-medium">
+                      Show credential <ArrowUpRight size={10} />
+                    </span>
                   </div>
                 </div>
               ))}
@@ -1548,6 +1555,204 @@ export default function App() {
           </div>
         </section>
 
+          </motion.div>
+        )}
+
+        {activePage === "certifications" && (
+          <motion.div
+            key="certifications-page"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Credentials Validation Registry */}
+            <section className="py-24 sm:py-32 relative px-6 -mx-6">
+              <div className="max-w-6xl mx-auto">
+                <div className="mb-16">
+                  <span className="text-xs font-mono text-emerald-500 mb-6 block uppercase tracking-widest">// Credentials Validation Registry</span>
+                  <h2 className="text-4xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9]">
+                    Professional Registry &amp; Certifications
+                  </h2>
+                  <p className="text-zinc-500 text-lg max-w-2xl mt-4">
+                    Authorized and verified technical licenses and competencies reflecting standard execution across growth stages, marketing automation engines, and machine learning/AI agent integrations.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {CERTIFICATIONS.map((cert) => (
+                    <div 
+                      key={cert.id}
+                      onClick={() => setSelectedCert(cert)}
+                      className="group p-6 rounded-2xl bg-zinc-900/10 border border-white/5 hover:border-emerald-500/20 transition-all duration-500 hover:bg-zinc-900/20 flex flex-col justify-between h-full animate-fadeIn cursor-pointer"
+                    >
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-start">
+                          <div className="p-2 bg-emerald-500/5 rounded-xl border border-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
+                            <Award size={18} />
+                          </div>
+                          <span className="text-[10px] font-mono text-zinc-600 font-bold">
+                            [{cert.id}]
+                          </span>
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <h3 className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors line-clamp-2 uppercase min-h-[40px]">
+                            {cert.title}
+                          </h3>
+                          <p className="text-emerald-500/90 font-medium text-xs">
+                            {cert.issuer}
+                          </p>
+                    {/* Miniature interactive preview thumb representation of certificate */}
+                        <div className="relative mt-4 aspect-[1.414/1] w-full rounded-xl bg-white border border-zinc-200 p-1.5 overflow-hidden shadow-md group-hover:border-emerald-500 group-hover:shadow-[0_4px_20px_rgba(16,185,129,0.12)] transition-all flex flex-col justify-between text-[4px] leading-tight select-none">
+                          {cert.logoType === "alison" && (
+                            <div className="h-full flex gap-1 text-[2.5px] p-0.5 border-[1.5px] border-double border-[#005B4C]/45 rounded relative bg-white text-zinc-800">
+                              <div className="absolute inset-0 bg-[#E5F6EE]/20 -z-10" />
+                              <div className="w-[20%] h-full bg-[#E5F6EE] border-r border-[#005B4C]/25 flex flex-col justify-between py-1 -mt-1 -mb-1 -ml-1 shrink-0">
+                                <div className="w-3 h-3 rounded-full border border-[#005B4C]/30 flex items-center justify-center bg-white mx-auto text-[2.5px] font-sans font-bold text-[#4B0082] p-0.5 leading-none shrink-0">CPD</div>
+                                <span className="text-[2px] text-center font-mono font-bold text-zinc-500">{cert.date.split(" ").pop()}</span>
+                              </div>
+                              <div className="flex-1 flex flex-col justify-between pl-1">
+                                <div className="flex justify-between font-sans items-center">
+                                  <span className="font-extrabold text-[#00A383] text-[4.5px]">Alison</span>
+                                  <span className="text-zinc-400 font-mono text-[2.5px] uppercase font-bold">CPD Certified</span>
+                                </div>
+                                <div className="text-center font-sans space-y-0.5 my-auto">
+                                  <span className="block text-[4.2px] font-black text-zinc-800 uppercase tracking-wide leading-none">OLAMIDE RUTH DAVID</span>
+                                  <span className="block text-[2.5px] text-zinc-500 uppercase max-w-[85px] mx-auto truncate font-sans font-semibold">{cert.title}</span>
+                                </div>
+                                <div className="flex justify-between text-[2px] text-zinc-500 font-mono items-end border-t border-zinc-100 pt-0.5">
+                                  <span>ID: {cert.verifyId}</span>
+                                  <span className="italic font-serif font-bold text-zinc-700">M. Richardson</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {cert.logoType === "wiley" && (
+                            <div className="h-full flex flex-col justify-between text-[2.5px] border border-zinc-200/60 p-1 relative bg-white text-zinc-800 rounded">
+                              <div className="absolute inset-0.5 border border-dashed border-zinc-100 pointer-events-none -z-10" />
+                              <div className="flex justify-between items-center border-b border-zinc-150 pb-0.5 font-sans">
+                                <div className="flex items-center gap-0.5">
+                                  <div className="w-3 h-3 rounded-full border border-emerald-500/30 flex items-center justify-center bg-white text-emerald-600 text-[3.5px] font-serif font-black shadow-sm">W</div>
+                                  <span className="font-black text-zinc-800 uppercase text-[3.5px] font-serif tracking-tighter">WILEY</span>
+                                </div>
+                                <span className="text-sky-600 text-[4px] font-sans font-black italic text-right leading-none">coursera</span>
+                              </div>
+                              <div className="text-center space-y-0.5 py-1 my-auto">
+                                <p className="text-[2px] text-zinc-400 leading-none">{cert.date.replace("Issued ", "")}</p>
+                                <span className="block text-[4.5px] font-black text-zinc-900 font-serif leading-none mt-0.5">Olamide Ruth David</span>
+                                <span className="block text-[2.5px] text-zinc-550 font-sans max-w-[110px] mx-auto truncate leading-tight uppercase font-medium">{cert.title}</span>
+                              </div>
+                              <div className="flex justify-between items-end text-[2px] text-zinc-400 font-mono border-t border-zinc-100 pt-0.5">
+                                <span>Wiley Skills Network</span>
+                                <span className="text-[2.5px] text-sky-600 font-bold font-mono">Verify Cert</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {cert.logoType === "packt" && (
+                            <div className="h-full flex flex-col justify-between text-[2.5px] border border-zinc-200/60 p-1 relative bg-white text-zinc-800 rounded">
+                              <div className="absolute inset-0.5 border border-dashed border-zinc-100 pointer-events-none -z-10" />
+                              <div className="flex justify-between items-center border-b border-zinc-150 pb-0.5 font-sans">
+                                <span className="font-extrabold text-[#F05A28] uppercase text-[4.5px] tracking-tighter font-mono">&lt;packt&gt;</span>
+                                <span className="text-sky-600 text-[4px] font-sans font-black italic text-right leading-none">coursera</span>
+                              </div>
+                              <div className="text-center space-y-0.5 py-1 my-auto">
+                                <p className="text-[2px] text-zinc-400 leading-none">{cert.date.replace("Issued ", "")}</p>
+                                <span className="block text-[4.5px] font-black text-zinc-900 font-serif leading-none mt-0.5">Olamide Ruth David</span>
+                                <span className="block text-[2.5px] text-zinc-550 font-sans max-w-[110px] mx-auto truncate leading-tight uppercase font-medium">{cert.title}</span>
+                              </div>
+                              <div className="flex justify-between items-end text-[2px] text-zinc-400 font-mono border-t border-zinc-100 pt-0.5">
+                                <span>Packt Editorial Board</span>
+                                <span className="text-[2.5px] text-sky-600 font-bold font-mono">Verify Cert</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {cert.logoType === "hubspot" && (
+                            <div className="h-full flex flex-col justify-between text-[2.5px] border border-zinc-200/60 p-1 relative bg-white text-zinc-800 rounded">
+                              <div className="absolute inset-0.5 border border-dashed border-zinc-100 pointer-events-none -z-10" />
+                              <div className="flex justify-between items-center border-b border-zinc-150 pb-0.5 font-sans">
+                                <span className="text-sky-600 text-[4px] font-sans font-black italic text-left leading-none">coursera</span>
+                                <span className="text-zinc-500 text-[3.5px] font-sans text-right uppercase font-bold tracking-tighter leading-none">PROJECT CERT</span>
+                              </div>
+                              <div className="text-center space-y-0.5 py-1 my-auto">
+                                <p className="text-[2px] text-zinc-400 leading-none">{cert.date.replace("Issued ", "")}</p>
+                                <span className="block text-[4.5px] font-black text-zinc-900 font-serif leading-none mt-0.5">Olamide Ruth David</span>
+                                <span className="block text-[2.5px] text-zinc-550 font-sans max-w-[110px] mx-auto truncate leading-tight uppercase font-medium">{cert.title}</span>
+                              </div>
+                              <div className="flex justify-between items-end text-[2px] text-zinc-400 font-mono border-t border-zinc-100 pt-0.5">
+                                <span>HubSpot Partner</span>
+                                <span className="text-[2.5px] text-sky-600 font-bold font-mono">Verify Cert</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {cert.logoType === "maryland" && (
+                            <div className="h-full flex flex-col justify-between text-[2.5px] border border-zinc-200/60 p-1 relative bg-white text-zinc-800 rounded">
+                              <div className="absolute inset-0.5 border border-dashed border-zinc-100 pointer-events-none -z-10" />
+                              <div className="flex justify-between items-center border-b border-zinc-150 pb-0.5 font-sans">
+                                <div className="flex flex-col leading-none">
+                                  <span className="text-[#E03A3E] font-black font-sans text-[2px] leading-none">UNIVERSITY OF</span>
+                                  <span className="font-extrabold text-zinc-950 uppercase text-[2.8px] leading-none mt-0.5">MARYLAND</span>
+                                </div>
+                                <span className="text-sky-600 text-[4px] font-sans font-black italic text-right leading-none">coursera</span>
+                              </div>
+                              <div className="text-center space-y-0.5 py-1 my-auto">
+                                <p className="text-[2px] text-zinc-400 leading-none">{cert.date.replace("Issued ", "")}</p>
+                                <span className="block text-[4.5px] font-black text-zinc-900 font-serif leading-none mt-0.5">Olamide Ruth David</span>
+                                <span className="block text-[2.5px] text-zinc-550 font-sans max-w-[110px] mx-auto truncate leading-tight uppercase font-medium">{cert.title}</span>
+                              </div>
+                              <div className="flex justify-between items-end text-[2px] text-zinc-400 font-mono border-t border-zinc-100 pt-0.5">
+                                <span>UMD College Park</span>
+                                <span className="text-[2.5px] text-sky-600 font-bold font-mono">Verify Cert</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {cert.logoType === "pma" && (
+                            <div className="h-full flex flex-col justify-between text-[2.5px] border border-zinc-200/50 p-1 relative bg-white text-zinc-800 rounded">
+                              <div className="flex justify-between items-center border-b border-zinc-100 pb-0.5 font-sans">
+                                <span className="text-[2.2px] font-bold text-blue-600 font-sans uppercase">Graded Assignment</span>
+                                <span className="text-emerald-600 font-mono text-[2.8px] font-black uppercase">100% Score</span>
+                              </div>
+                              <div className="text-center space-y-0.5 py-0.5 my-auto">
+                                <span className="block text-[3.5px] font-black text-[#002664] font-sans truncate leading-none uppercase max-w-[105px] mx-auto">{cert.title}</span>
+                                <span className="block text-[2px] text-zinc-400 font-sans leading-none mt-0.5">Status: PASSED (Submitted May 10)</span>
+                              </div>
+                              <div className="flex justify-between items-center text-[2px] text-zinc-500 border-t border-zinc-150 pt-0.5">
+                                <span className="flex items-center gap-0.5 font-sans text-[2px] font-bold">📅 Due Jun 15</span>
+                                <span className="text-blue-600 font-bold font-mono">View Report</span>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Hover zoom overlay icon hint */}
+                          <div className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span className="px-2.5 py-1 rounded bg-emerald-500 text-black font-sans font-bold text-[8px] uppercase tracking-wider flex items-center gap-1 shadow-md">
+                              Read Certificate <ArrowUpRight size={8} />
+                            </span>
+                          </div>
+                        </div>            </div>
+
+                      </div>
+
+                      <div className="pt-4 border-t border-white/5 mt-4 flex items-center justify-between text-[11px]">
+                        <div className="flex items-center gap-1.5 text-zinc-500 font-mono">
+                          <Calendar size={12} className="text-zinc-600" />
+                          <span>{cert.date}</span>
+                        </div>
+
+                        <span className="flex items-center gap-1 text-emerald-400 font-mono text-[10px] bg-emerald-500/5 hover:bg-emerald-500/15 border border-emerald-500/10 px-2.5 py-1 rounded-md transition-colors font-medium">
+                          Show credential <ArrowUpRight size={10} />
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
           </motion.div>
         )}
 
@@ -3219,6 +3424,12 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Interactive Certificate Modal Reader */}
+      <CertificateModal
+        selectedCert={selectedCert}
+        onClose={() => setSelectedCert(null)}
+      />
 
       {/* Dynamic Lightbox for Portfolio / Analytics */}
       <AnimatePresence>
