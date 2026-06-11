@@ -581,40 +581,25 @@ export default function CertificateModal({ selectedCert, onClose }: CertificateM
 
             {/* Actions Panel */}
             <div className="pt-6 border-t border-white/5 mt-6 space-y-3">
-              <div className="flex gap-2">
-                {selectedCert.verifyId && (
-                  <button
-                    onClick={handleCopyId}
-                    className="flex-1 px-4 py-2.5 rounded-xl border border-white/10 hover:border-white/20 hover:bg-white/5 text-zinc-300 hover:text-white text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
-                    id="copy-cert-id-button"
-                  >
-                    {copied ? (
-                      <>
-                        <Check size={14} className="text-emerald-400 animate-bounce" />
-                        Copied ID!
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={13} />
-                        Copy ID
-                      </>
-                    )}
-                  </button>
-                )}
-
-                {selectedCert.verifyUrl && (
-                  <a
-                    href={selectedCert.verifyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer select-none"
-                    style={{ textDecoration: "none" }}
-                    id="verify-cert-url-anchor"
-                  >
-                    Verify Credential <ExternalLink size={13} />
-                  </a>
-                )}
-              </div>
+              {selectedCert.verifyId && (
+                <button
+                  onClick={handleCopyId}
+                  className="w-full px-4 py-2.5 rounded-xl border border-white/10 hover:border-white/20 hover:bg-white/5 text-zinc-300 hover:text-white text-xs font-bold transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
+                  id="copy-cert-id-button"
+                >
+                  {copied ? (
+                    <>
+                      <Check size={14} className="text-emerald-400 animate-bounce" />
+                      Copied ID!
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={13} />
+                      Copy ID
+                    </>
+                  )}
+                </button>
+              )}
               <p className="text-[9px] text-zinc-500 text-center font-mono font-medium flex items-center justify-center gap-1 select-none">
                 <ShieldCheck size={10} className="text-zinc-600" />
                 CPD Certified Registry Handshake Secured
