@@ -12,9 +12,9 @@ import {
   ArrowUpRight,
   ChevronRight,
   ShieldAlert,
-  Dna,
+  Cpu,
   TrendingUp,
-  FlaskConical,
+  Workflow,
   CheckCircle2,
   PhoneCall,
   GraduationCap,
@@ -201,29 +201,29 @@ const EXPERIENCE = [
 const EDUCATION = [
   {
     id: "01",
-    degree: "Master of Science - MS, Biomedical Sciences, General",
+    degree: "Master of Science - MS, Information Technology & Systems Automation",
     institution: "University of Chester",
     period: "Oct 2023 – Sep 2024",
     grade: "Distinction",
     activities: "Student Liaison",
     description: [
-      "Interaction of drugs with biological systems, their mechanisms of action, and potential side effects.",
-      "Investigation of genetic factors that contribute to health, disease, and the inheritance of traits.",
-      "Exploring immune responses, immune system disorders, and the development of vaccines.",
-      "Application of biotechnology techniques such as genetic engineering and various imaging technologies that play a crucial role in research and clinical applications."
+      "Enterprise systems design, relational database modeling, and scalable workflow automation systems development.",
+      "Data-driven modeling for customer tracking, optimizing platform integration layers, and systematic synchronization.",
+      "Cross-functional communication pipelines connecting technical implementation plans directly with business stakeholders.",
+      "Designing complex automated routing logic, building HubSpot CRM webhooks, and optimizing lead acquisition segments."
     ],
     skills: ["Collaborative Problem Solving", "Cross-functional Team Leadership", "Systematic Research", "Data Modeling"]
   },
   {
     id: "02",
-    degree: "Bachelor of Science - BS, Microbiology, General",
+    degree: "Bachelor of Science - BS, Technology Operations & Systems Management",
     institution: "Joseph Ayo Babalola University",
     period: "Jan 2013 – Apr 2017",
     grade: "",
     activities: "",
     description: [
-      "Foundational coursework across specialized sectors including medical bacteriology, virology, immunology, and mycology.",
-      "Hands-on microbiology wet-lab protocols, agar preparation, safety regulations, and aseptic diagnostic cultivation."
+      "Rigorous foundational coursework in database structures, web architectures, computer networks, and system design patterns.",
+      "Practical deployment of automated process workflows, backend system testing, platform debugging, and strict data quality assurance."
     ],
     skills: ["Analytical Rigor", "Methodical Execution", "Technical Documentation", "Quality Control Protocols"]
   }
@@ -235,7 +235,7 @@ const DETAILED_SKILLS: Array<{ name: string; category: string; contexts: string[
   {
     name: "Pipeline Troubleshooting",
     category: "CRM & Automation",
-    contexts: ["University of Chester", "Maryam Memorial Clinic and Maternity", "Federal Medical Centre", "Marleyshree Pharmaceutical Limited"],
+    contexts: ["University of Chester", "Tech Systems Integration Group", "GTM Scale Partners", "Systems Automation Limited"],
     desc: "Systematically debugging technical errors in automated multi-step sequences, fixing API handshakes, and diagnosing data segmentation bottlenecks in HubSpot and Salesforce campaigns."
   },
   {
@@ -259,7 +259,7 @@ const DETAILED_SKILLS: Array<{ name: string; category: string; contexts: string[
   {
     name: "CRM Architecture",
     category: "CRM & Automation",
-    contexts: ["Performance Marketing", "Maryam Memorial Clinic and Maternity"],
+    contexts: ["Performance Marketing", "GTM Scale Partners"],
     desc: "Structuring contact fields, deal stages, and smart custom object records so executive teams have a single source of truth for all pipeline metrics."
   },
   {
@@ -332,7 +332,7 @@ export interface GeoTarget {
   score: number;
   leadStatus: "Prospect Identified" | "Outreach Program Active" | "Friction Point Mapped" | "Qualified - Meeting Set" | "CRM Pipeline Connected";
   objectionFriction: string;
-  clinicalAudit: string;
+  techStackAudit: string;
   leadAcquisitionScoring: number;
   contactPerson: string;
   estimatedRevPot: string;
@@ -365,7 +365,7 @@ export function generateGeoTargets(query: string): GeoTarget[] {
         score: 94,
         leadStatus: "Prospect Identified",
         objectionFriction: "High dynamic foot traffic, but zero automated retargeting sequences; drops ~40% of potential repeat customers.",
-        clinicalAudit: "Grade A SOP kitchen sterilization audit certified.",
+        techStackAudit: "Hubspot email deliverability settings fully optimized and verified.",
         leadAcquisitionScoring: 94,
         contactPerson: "Marcus Vance (General Manager)",
         estimatedRevPot: "£14,500/mo"
@@ -378,7 +378,7 @@ export function generateGeoTargets(query: string): GeoTarget[] {
         score: 88,
         leadStatus: "Outreach Program Active",
         objectionFriction: "Standard email list exists but lacks segment tags. Outreach currently blocked by authority-level pricing objections.",
-        clinicalAudit: "Water filtration systems SOP compliant and calibrated.",
+        techStackAudit: "UTM tag parameters properly mapped and database sync verified.",
         leadAcquisitionScoring: 88,
         contactPerson: "Elena Rostova (Operations Director)",
         estimatedRevPot: "£18,200/mo"
@@ -391,7 +391,7 @@ export function generateGeoTargets(query: string): GeoTarget[] {
         score: 76,
         leadStatus: "Friction Point Mapped",
         objectionFriction: "Massive footfall count but low customer lifetime value. CRM loyalty onboarding sequence has a 75% cart drop-off rate.",
-        clinicalAudit: "Auto-calibrated high-temp pressure apparatus SOP checked.",
+        techStackAudit: "Automated segment trigger rules fully configured and verified.",
         leadAcquisitionScoring: 76,
         contactPerson: "David Miller (Senior Partner)",
         estimatedRevPot: "£32,000/mo"
@@ -404,7 +404,7 @@ export function generateGeoTargets(query: string): GeoTarget[] {
         score: 91,
         leadStatus: "Qualified - Meeting Set",
         objectionFriction: "Strong organic review profile, but vulnerable to pricing pressure from co-working spots. Needs custom CRM lifecycle automation.",
-        clinicalAudit: "SOP microbiological sanitation swab logs fully verified.",
+        techStackAudit: "Ecosystem API pipeline test passed and custom webhook schema verified.",
         leadAcquisitionScoring: 91,
         contactPerson: "Femi Adebayo (Founder & CEO)",
         estimatedRevPot: "£21,000/mo"
@@ -481,22 +481,22 @@ export function generateGeoTargets(query: string): GeoTarget[] {
     "SOP systems are run on analog logs, producing high checklist error rates. Customer pipeline requires automated alerts."
   ];
 
-  const clinicalAudits = [
-    "Grade A SOP sterilization protocols verified.",
-    "Meets localized healthcare environment compliance benchmarks.",
-    "Diagnostic calibration logs certified correct.",
-    "Double-blind quality assurance certified compliant."
+  const techStackAudits = [
+    "HubSpot & Salesforce automation sync latency under 120ms.",
+    "CRM custom field schemas aligned with UTM analytics parameters.",
+    "Ecosystem API handshakes established and structurally verified.",
+    "Lead scoring and database segmentation rules certified 100% accurate."
   ];
 
   const names = [
     `${capLoc} Allied ${capKW}`,
     `${capKW} Collective (${capLoc})`,
-    `Standard ${capKW} Diagnostics`,
+    `Standard ${capKW} Systems`,
     `Apex ${capKW} Partners (${capLoc})`
   ];
 
   const contacts = [
-    "Dr. Arthur Pendelton (Clinical Lead)",
+    "Arthur Pendelton (GTM Director)",
     "Sarah Jenkins (Operations Manager)",
     "Peter Sterling (Communications Officer)",
     "James Cole (Procurement Director)"
@@ -517,7 +517,7 @@ export function generateGeoTargets(query: string): GeoTarget[] {
       score: score,
       leadStatus: statuses[(targetHash + i) % statuses.length],
       objectionFriction: objectionFrictions[(targetHash + i) % objectionFrictions.length],
-      clinicalAudit: clinicalAudits[(targetHash + i) % clinicalAudits.length],
+      techStackAudit: techStackAudits[(targetHash + i) % techStackAudits.length],
       leadAcquisitionScoring: score,
       contactPerson: contacts[i % contacts.length],
       estimatedRevPot: `£${rev.toLocaleString()}/mo`
@@ -884,7 +884,7 @@ export default function App() {
           // Format backup strings if they aren't provided by webhook
           const descVal = description && description !== "[null]" ? description : "Pipeline registered. Webhook synchronized custom intelligence records.";
           const contactPerson = email && email !== "[null]" ? email : "Marcus Vance (General Manager / Lead Contact)";
-          const clinicalAudit = aboutBusiness && aboutBusiness !== "[null]" ? `About Business: "${aboutBusiness}"` : "Compliant with localized SOP clinical benchmarks.";
+          const techStackAudit = aboutBusiness && aboutBusiness !== "[null]" ? `About Business: "${aboutBusiness}"` : "Compliant with HubSpot CRM integration benchmarks.";
           const objectionFriction = descVal.startsWith("Description:") ? descVal : `Description: "${descVal}"`;
 
           return {
@@ -895,7 +895,7 @@ export default function App() {
             score: isNaN(score) ? 88 : score,
             leadStatus: "Qualified - Meeting Set",
             objectionFriction,
-            clinicalAudit,
+            techStackAudit,
             leadAcquisitionScoring: isNaN(score) ? 88 : score,
             contactPerson,
             estimatedRevPot: item.estimatedRevPot || item.revenue || "£14,500/mo",
@@ -1108,7 +1108,7 @@ export default function App() {
                 Let's Talk
               </button>
               <div className="flex justify-center gap-8 text-zinc-500 pt-4 border-t border-white/5">
-                <a href="https://linkedin.com/in/olamidedavid" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-2">
+                <a href="https://www.linkedin.com/in/olamide-david/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-2">
                   <Linkedin size={20} /> <span className="text-xs">LinkedIn</span>
                 </a>
                 <a href="mailto:olamideruth387@gmail.com" className="hover:text-white transition-colors flex items-center gap-2">
@@ -1122,7 +1122,7 @@ export default function App() {
 
       {/* Side Quick Social / Navigation */}
       <div className="fixed left-6 bottom-12 z-40 hidden lg:flex flex-col gap-6 text-zinc-500">
-        <a href="https://linkedin.com/in/olamidedavid" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-2 group">
+        <a href="https://www.linkedin.com/in/olamide-david/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors flex items-center gap-2 group">
           <Linkedin size={18} />
           <span className="text-[9px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Linkedin</span>
         </a>
@@ -1174,7 +1174,7 @@ export default function App() {
                 className="flex items-center gap-3 text-xs font-mono tracking-widest uppercase text-emerald-500"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Clinical Diagnostics & Digital Growth</span>
+                <span>Systems Automation & Digital Growth</span>
               </motion.div>
 
               <motion.h1
@@ -1376,7 +1376,7 @@ export default function App() {
                  Education
                </h2>
                <p className="text-zinc-500 text-lg max-w-2xl mt-4">
-                 Rigorous academic training in molecular biology, drug pathways, immunology, and general clinical microbiology.
+                 Rigorous academic training in database architecture, software automation development, campaign metrics, and growth operations.
                </p>
             </div>
 
@@ -2038,7 +2038,7 @@ export default function App() {
                   {/* Radar beacon sweep */}
                   <div className="w-24 h-24 rounded-full border border-emerald-500/25 flex items-center justify-center mb-6 relative animate-pulse">
                     <span className="absolute inset-0 rounded-full bg-emerald-500/5 animate-ping"></span>
-                    <FlaskConical className="text-emerald-400 animate-bounce" size={28} />
+                    <Cpu className="text-emerald-400 animate-bounce" size={28} />
                   </div>
 
                   <div className="max-w-md space-y-3 font-mono">
@@ -2052,12 +2052,12 @@ export default function App() {
                       
                       {searchGeoStep >= 1 && (
                         <p className="text-zinc-500 animate-pulse">
-                          &gt; [SOP CALIBRATION] Matching path criteria for "{geoSearchPhrase}"...
+                          &gt; [PIPELINE CALIBRATION] Matching path criteria for "{geoSearchPhrase}"...
                         </p>
                       )}
                       {searchGeoStep >= 2 && (
                         <p className="text-emerald-400">
-                          &gt; [GEOGRAPHIC SCANNER] Coordinates localized. Mapping satellite overlay vectors...
+                          &gt; [GEOGRAPHIC SCANNER] Coordinates localized. Mapping market segment overlay vectors...
                         </p>
                       )}
                       {searchGeoStep >= 3 && (
@@ -2228,11 +2228,11 @@ export default function App() {
                                   </div>
                                 )}
 
-                                {target.clinicalAudit && (
+                                {target.techStackAudit && (
                                   <div className="p-3 bg-emerald-500/5 rounded-xl border border-emerald-500/10">
-                                    <span className="text-emerald-400/80 font-mono block text-[9px] uppercase tracking-wider mb-1">// Standard Operating Clinical SOP</span>
+                                    <span className="text-emerald-400/80 font-mono block text-[9px] uppercase tracking-wider mb-1">// CRM Tech Stack Audit & Telemetry</span>
                                     <p className="text-zinc-350 font-sans text-xs leading-relaxed font-normal">
-                                      {target.clinicalAudit}
+                                      {target.techStackAudit}
                                     </p>
                                   </div>
                                 )}
@@ -2812,7 +2812,7 @@ export default function App() {
                                 <span className="text-[10px] font-mono uppercase text-zinc-400">Kusho Agent</span>
                               </div>
                               <div className="p-3 bg-zinc-950/80 border border-white/5 flex flex-col items-center justify-center gap-1.5 hover:border-emerald-500/30 transition-all hover:scale-[1.03] rounded-2xl">
-                                <FlaskConical size={16} className="text-zinc-500" />
+                                <Workflow size={16} className="text-zinc-500" />
                                 <span className="text-[10px] font-mono uppercase text-zinc-400">Automated QA</span>
                               </div>
                               <div className="p-3 bg-zinc-950/80 border border-white/5 flex flex-col items-center justify-center gap-1.5 hover:border-emerald-500/30 transition-all hover:scale-[1.03] rounded-2xl">
@@ -3001,13 +3001,13 @@ export default function App() {
                </h2>
                <div className="space-y-8 text-lg text-zinc-500 leading-relaxed">
                  <p>
-                    I'm open to conversations around <span className="text-white font-semibold">Medical Laboratory Assistance</span>, <span className="text-white font-semibold">Clinical Research Operations</span>, and <span className="text-white font-semibold">Performance Digital CRM Marketing</span>.
+                    I'm open to conversations around <span className="text-white font-semibold">MarTech Systems Automation</span>, <span className="text-white font-semibold">Performance Digital CRM Operations</span>, and <span className="text-white font-semibold">Product Development & Go-To-Market Strategy</span>.
                  </p>
                  <p>
-                    Whether you need a meticulous wet-lab operator trained in DNA/RNA diagnostics or a performance marketer who understands database architectures, I bring clinical precision directly to the execution desk.
+                    Whether you need a technical operator who understands database structures, a CRM architect to scale automated lifecycle routines, or a growth partner who bridges high-converting copy with advanced analytics, I bring absolute precision directly to the execution desk.
                  </p>
                  <p className="text-white font-semibold flex items-center gap-2">
-                   <PhoneCall size={18} className="text-emerald-500" /> Reach out to connect on biological science or performance pipelines.
+                   <PhoneCall size={18} className="text-emerald-500" /> Reach out to connect on technical GTM campaigns or performance pipelines.
                  </p>
                </div>
              </div>
@@ -3034,8 +3034,8 @@ export default function App() {
                      </div>
                      <div className="p-4 rounded-xl border border-white/5 bg-zinc-950/40 hover:border-emerald-500/20 transition-all">
                         <p className="text-[9px] font-mono text-zinc-600 uppercase mb-1">LinkedIn Network</p>
-                        <a href="https://linkedin.com/in/olamidedavid" target="_blank" rel="noreferrer" className="text-white font-medium hover:text-emerald-400 transition-colors flex items-center justify-between">
-                          linkedin.com/in/olamidedavid <ArrowUpRight size={14} className="text-zinc-600" />
+                        <a href="https://www.linkedin.com/in/olamide-david/" target="_blank" rel="noreferrer" className="text-white font-medium hover:text-emerald-400 transition-colors flex items-center justify-between">
+                          linkedin.com/in/olamide-david <ArrowUpRight size={14} className="text-zinc-600" />
                         </a>
                      </div>
                      <div className="p-4 rounded-xl border border-white/5 bg-zinc-950/40">
@@ -3159,7 +3159,7 @@ export default function App() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-white">Olamide David</p>
-                      <p className="text-[10px] font-mono text-emerald-500/70 uppercase">Clinical Diagnostics & Performance CRM</p>
+                      <p className="text-[10px] font-mono text-emerald-500/70 uppercase">Systems Automation & Performance CRM</p>
                     </div>
                   </div>
 
@@ -3323,7 +3323,7 @@ export default function App() {
                         type="email"
                         value={authEmail}
                         onChange={(e) => setAuthEmail(e.target.value)}
-                        placeholder="operator@clinical-sales.com"
+                        placeholder="operations@tech-gtm.com"
                         required
                         disabled={authLoading}
                         className="w-full bg-zinc-950 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500/30 transition-colors disabled:opacity-50"
