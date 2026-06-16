@@ -41,7 +41,8 @@ import channelDistribution from "./assets/images/channel_distribution_1780020800
 import geoDistribution from "./assets/images/geo_distribution_1780020824560.png";
 import pipelineArchitecture from "./assets/images/pipeline_architecture_1780020844192.png";
 import { supabase, isSupabaseConfigured } from "./supabaseClient";
-import { User, Lock, LogOut, Key, Check } from "lucide-react";
+import { User, Lock, LogOut, Key, Check, Download, FileText } from "lucide-react";
+import { generateProfessionalPDF } from "./utils/pdfGenerator";
 
 export interface PortfolioProject {
   id?: string;
@@ -668,6 +669,35 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "instant" as any });
   }, [activePage]);
 
+  // Handle bidirectional URL routing and linking
+  useEffect(() => {
+    const handleUrlRouting = () => {
+      const params = new URLSearchParams(window.location.search);
+      const pageParam = params.get("page");
+      const hashParam = window.location.hash.replace("#", "");
+      
+      const targetPage = pageParam || hashParam;
+      const validPages = ["about", "services", "experience", "certifications", "tools", "portfolio", "blog", "contact"];
+      if (targetPage && validPages.includes(targetPage)) {
+        setActivePage(targetPage as any);
+      }
+    };
+    
+    handleUrlRouting();
+    window.addEventListener("hashchange", handleUrlRouting);
+    return () => window.removeEventListener("hashchange", handleUrlRouting);
+  }, []);
+
+  useEffect(() => {
+    const validPages = ["about", "services", "experience", "certifications", "tools", "portfolio", "blog", "contact"];
+    if (validPages.includes(activePage)) {
+      const currentHash = window.location.hash.replace("#", "");
+      if (currentHash !== activePage) {
+        window.history.replaceState(null, "", `#${activePage}`);
+      }
+    }
+  }, [activePage]);
+
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null);
@@ -1017,6 +1047,14 @@ export default function App() {
         </div>
         <div className="flex items-center gap-3">
           <button 
+            onClick={() => generateProfessionalPDF(EXPERIENCE, EDUCATION, CERTIFICATIONS, portfolioProjects)}
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 lg:px-5 lg:py-2 bg-zinc-900 border border-white/10 hover:border-emerald-500/50 hover:bg-zinc-800 text-zinc-300 hover:text-white rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-all duration-300 focus:outline-none cursor-pointer whitespace-nowrap"
+            title="Download Comprehensive Summary as PDF"
+          >
+            <Download size={13} className="text-emerald-400" />
+            <span>PDF CV</span>
+          </button>
+          <button 
             onClick={() => setActivePage("contact")} 
             className="hidden md:inline-block px-3 py-1.5 lg:px-5 lg:py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] focus:outline-none cursor-pointer border-none whitespace-nowrap"
           >
@@ -1097,6 +1135,17 @@ export default function App() {
                   <span>Sign In / Sign Up</span>
                 </button>
               )}
+
+              <button 
+                onClick={() => {
+                  generateProfessionalPDF(EXPERIENCE, EDUCATION, CERTIFICATIONS, portfolioProjects);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 py-4 border border-zinc-750 bg-zinc-900/80 text-zinc-300 hover:text-white rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer"
+              >
+                <Download size={14} className="text-emerald-400" />
+                <span>Download PDF Summary</span>
+              </button>
 
               <button 
                 onClick={() => {
@@ -1208,6 +1257,13 @@ export default function App() {
                     className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold uppercase tracking-wider text-xs rounded-full transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-105 cursor-pointer border-none"
                   >
                     Claim Your Free 15-Minute Pipeline Audit
+                  </button>
+                  <button
+                    onClick={() => generateProfessionalPDF(EXPERIENCE, EDUCATION, CERTIFICATIONS, portfolioProjects)}
+                    className="px-6 py-4 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-white/10 hover:border-emerald-500/40 font-extrabold uppercase tracking-wider text-xs rounded-full transition-all duration-300 hover:scale-105 cursor-pointer flex items-center gap-2"
+                  >
+                    <Download size={14} className="text-emerald-400" />
+                    <span>Download PDF Resume</span>
                   </button>
                   <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/5 px-3 py-1 rounded border border-emerald-500/10 font-bold uppercase tracking-widest animate-pulse">
                     Only 3 spots left this week
@@ -2445,17 +2501,6 @@ export default function App() {
                           <h2 className="text-xl md:text-2xl font-bold text-white uppercase font-sans tracking-tight">
                             Select Case Archive
                           </h2>
-                        </div>
-                        {/* Refetch / Refresh button */}
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={handleManualRefresh}
-                            disabled={isManualRefreshing}
-                            className="px-4 py-2 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-400 font-mono text-[10px] uppercase tracking-wider rounded-lg border border-white/10 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
-                          >
-                            <Clock size={11} className={`${isManualRefreshing ? 'animate-spin text-emerald-400' : 'text-zinc-500'}`} />
-                            {isManualRefreshing ? "Syncing Workspace..." : "Refresh Database"}
-                          </button>
                         </div>
                       </div>
 
