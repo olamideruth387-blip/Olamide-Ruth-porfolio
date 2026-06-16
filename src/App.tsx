@@ -3255,33 +3255,6 @@ export default function App() {
                 </p>
               </div>
 
-              {/* Status Info Badge */}
-              <div className="mb-6 p-3 rounded-xl border border-white/5 bg-zinc-900/40 flex items-center justify-between text-[11px] font-mono">
-                <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${isConfigured ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500 animate-pulse'}`}></div>
-                  <span className="text-zinc-400 uppercase">Provider Status:</span>
-                </div>
-                <span className={isConfigured ? 'text-emerald-400 font-semibold' : 'text-amber-400 font-semibold'}>
-                  {isConfigured ? 'Live Supabase API' : 'Sandbox Demo Mode'}
-                </span>
-              </div>
-
-              {!isConfigured && !user && (
-                <div className="mb-5 p-3.5 rounded-xl border border-dashed border-amber-500/20 bg-amber-500/5 text-xs space-y-2">
-                  <p className="font-semibold text-amber-400 flex items-center gap-1.5 font-mono">
-                    <ShieldAlert size={12} /> Key Setup Pending
-                  </p>
-                  <p className="text-zinc-400">
-                    Live Supabase keys are not configured. Standard operations are running in a **local offline sandbox with localStorage**.
-                  </p>
-                  <div className="pt-1.5 text-[10px] space-y-1 font-mono text-zinc-500 border-t border-white/5">
-                    <p className="text-white">// To enable full cloud storage, set:</p>
-                    <p>• <span className="text-amber-450 text-amber-400">VITE_SUPABASE_URL</span>: (Your project endpoint)</p>
-                    <p>• <span className="text-amber-450 text-amber-400">VITE_SUPABASE_ANON_KEY</span>: (Your anonymous key)</p>
-                  </div>
-                </div>
-              )}
-
               {/* Main Content Areas */}
               {user ? (
                 /* Profile & Sign Out Page */
