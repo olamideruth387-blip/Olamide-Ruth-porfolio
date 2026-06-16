@@ -201,31 +201,33 @@ const EXPERIENCE = [
 const EDUCATION = [
   {
     id: "01",
-    degree: "Master of Science - MS, Information Technology & Systems Automation",
+    degree: "Master of Science - MS, Biomedical Sciences, General",
     institution: "University of Chester",
     period: "Oct 2023 – Sep 2024",
     grade: "Distinction",
     activities: "Student Liaison",
     description: [
-      "Enterprise systems design, relational database modeling, and scalable workflow automation systems development.",
-      "Data-driven modeling for customer tracking, optimizing platform integration layers, and systematic synchronization.",
-      "Cross-functional communication pipelines connecting technical implementation plans directly with business stakeholders.",
-      "Designing complex automated routing logic, building HubSpot CRM webhooks, and optimizing lead acquisition segments."
+      "Interaction of drugs with biological systems, their mechanisms of action, and potential side effects.",
+      "Investigation of genetic factors that contribute to health, disease, and the inheritance of traits.",
+      "Exploring immune responses, immune system disorders, and the development of vaccines.",
+      "Educative techniques such as genetic engineering and various imaging technologies that play a crucial role in research and clinical applications."
     ],
-    skills: ["Collaborative Problem Solving", "Cross-functional Team Leadership", "Systematic Research", "Data Modeling"]
+    skills: ["Collaborative Problem Solving", "Cross-functional Team Leadership", "Systematic Research", "Data Analysis"]
   },
   {
     id: "02",
-    degree: "Bachelor of Science - BS, Technology Operations & Systems Management",
+    degree: "Bachelor of Science - BS, Microbiology, General",
     institution: "Joseph Ayo Babalola University",
     period: "Jan 2013 – Apr 2017",
     grade: "",
     activities: "",
     description: [
-      "Rigorous foundational coursework in database structures, web architectures, computer networks, and system design patterns.",
-      "Practical deployment of automated process workflows, backend system testing, platform debugging, and strict data quality assurance."
+      "Study of microorganisms, their physiology, metabolism, and critical roles in biological and clinical environments.",
+      "Laboratory-focused investigation of microbial cultures, sterile isolation techniques, and strict inoculation protocols.",
+      "Analysis of pathogenic bacteria, viruses, and immune responses supporting biological safety standards.",
+      "Comprehensive research into microbial genetics, molecular biology, and biotechnology applications in healthcare."
     ],
-    skills: ["Analytical Rigor", "Methodical Execution", "Technical Documentation", "Quality Control Protocols"]
+    skills: ["Analytical Rigor", "Laboratory Practices", "Systematic Research", "Quality Control Protocols"]
   }
 ];
 
