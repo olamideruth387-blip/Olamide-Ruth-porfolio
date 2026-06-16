@@ -3250,7 +3250,7 @@ export default function App() {
                 <p className="text-xs text-zinc-500 mt-1 max-w-xs mx-auto">
                   {user 
                     ? "You are logged in via Supabase secure authentication tier." 
-                    : "Connect, synchronize lead metadata, and access private clinic endpoints."
+                    : "Connect, synchronize database records, and manage custom operator profiles."
                   }
                 </p>
               </div>
